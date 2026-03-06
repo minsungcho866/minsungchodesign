@@ -1,5 +1,5 @@
 html{
-    background-image: url('../imgs/backround03.png');
+    background-image: url('../imgs/backround06.png');
 
     background-size: auto;
     animation: slide 20s 2s infinite;
@@ -19,7 +19,7 @@ button{
     background-color: transparent;
     border: none;
     margin-bottom: 20px;
-    color: rgb(219, 219, 219);
+     dcolor: rgb(16, 16, 16);
 }
 
 button:hover{
@@ -27,6 +27,6 @@ button:hover{
 }
 
 .home{
-    background-color: rgb(35, 41, 37);
+    background-color: rgb(234, 234, 234);
     margin-top: 20%;
     }
