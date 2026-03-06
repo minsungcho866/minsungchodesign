@@ -1,0 +1,146 @@
+html{
+    background-image: url('../img/backround05.png');
+    background-size: cover;
+}
+
+.box{
+    width: 30%;
+    height: auto;
+    background-color: rgb(232, 239, 232);
+    opacity: 98%;
+    border: 2px black;
+    padding: 10px;
+    margin-top: 10vw;
+    margin-bottom: 7vw;
+    margin-left: 35vw;
+    border-radius: 20px;
+    box-shadow: 5px 5px 10px #616161; padding: 15px;
+}
+
+h1{
+    text-align: center;
+    font-size: 9vw;
+    margin-top: 0;
+   font-family: "veneer", sans-serif;
+font-weight: 400;
+font-style: normal;
+    margin-bottom: 0;
+}
+
+
+.title{
+width: 65vw;
+height: auto;
+}
+
+p{
+    font-size: 18px;
+    position: relative;
+    top: -12vw;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+
+.button {
+	background-color: transparent;
+	border: none;
+	color: #000000;
+	text-align: center;
+	font-size: 28px;
+	padding: 20px;
+	width: 200px;
+	transition: all 0.5s;
+	cursor: pointer;
+	margin: 5px;
+	position: absolute;
+	right: 10px;
+	top: 0px;
+
+	font-family: "arek", serif;
+	font-weight: 400;
+	font-style: normal;
+	}
+		
+button:hover {
+ color: rgb(244, 252, 244);
+ transform: translateY(-4px);
+ text-shadow: 2px 2px black;
+}
+
+
+.buttontwo {
+	border-radius: 4px;
+	background-color: transparent;
+	border: none;
+	color: #000000;
+	text-align: center;
+	font-size: 28px;
+	padding: 20px;
+	width: 200px;
+	transition: all 0.5s;
+	cursor: pointer;
+	margin: 5px;
+	position: absolute;
+	left: 10px;
+	top: 0px;
+
+	font-family: "arek", serif;
+	font-weight: 400;
+	font-style: normal;
+	}
+		
+.buttontwo span {
+  cursor: pointer;
+  display: inline-block;
+  position: relative;
+  transition: 0.5s;
+}
+.buttontwo span:after {
+  content: '\276F';
+  position: absolute;
+  opacity: 0;
+  top: 0;
+  right: -20px;
+  transition: 0.5s;
+}
+		
+.buttontwo:hover span {
+  padding-right: 25px;
+  color: rgb(228, 76, 59);
+}
+		
+.buttontwo:hover span:after {
+  opacity: 1;
+  right: 0;
+}
+
+
+.img{
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.labtop{
+    width: 40vw;
+    height: auto;
+}
+
+
+.phone{
+    width: 20vw;
+    height: auto;
+
+    margin-left: 0%;
+    align-items: center;
+    position: relative;
+}
+
+.websitegif{
+    width: 25vw;
+    height: auto;
+
+    display: flex;
+    margin: auto;
+    margin-bottom: 5vw;
+    align-items: center;
+}

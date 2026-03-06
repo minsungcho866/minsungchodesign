@@ -1,0 +1,32 @@
+html{
+    background-image: url('../imgs/backround03.png');
+
+    background-size: auto;
+    animation: slide 20s 2s infinite;
+    background-repeat: no-repeat;
+}
+
+.navigation{
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+    display: flex;
+    flex-direction: column;
+    margin-top: 20%;
+}
+
+button{
+    background-color: transparent;
+    border: none;
+    margin-bottom: 20px;
+    color: rgb(219, 219, 219);
+}
+
+button:hover{
+    text-decoration: underline;
+}
+
+.home{
+    background-color: rgb(35, 41, 37);
+    margin-top: 20%;
+    }
