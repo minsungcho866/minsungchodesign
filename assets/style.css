@@ -61,7 +61,7 @@ h1{
 .btn:hover{
     color: rgb(13, 13, 13);
     background-color: transparent;
-    border-color: black;
+    border-color: 1px black;
 }
 
 .text{

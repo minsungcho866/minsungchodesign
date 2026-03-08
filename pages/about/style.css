@@ -34,15 +34,15 @@ p{
 }
 
 button{
-    background-color: transparent;
-    border:2px solid rgb(19,19,19);
-    color: rgb(218, 217, 217);
+    background-color: rgb(24, 24, 24);
+    border: none;
+    color: rgb(224, 224, 224);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
 }
 
 button:hover{
-    background-color: rgb(19, 19, 19);
-    border: transparent;
+    background-color: transparent;
+    border: 1px solid rgb(24, 24, 24);
     color: rgb(218, 217, 217);
     font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif
 }
