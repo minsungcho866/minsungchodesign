@@ -1,9 +1,9 @@
 html{
-    background-image: url('../imgs/backround01.png');
-    background: fixed;
+    background-image: url('../imgs/backround01.webp');
     background-size: cover;
-    animation: slide 20s 2s infinite;
     background-repeat: no-repeat;
+    background-attachment: fixed;
+    animation: slide 20s infinite;
 }
 
 h1{
@@ -16,12 +16,12 @@ h1{
 }
 
 @keyframes slide {
-    0%{background-image: url(../imgs/backround01.png);}
-    20%{background-image: url(../imgs/backround02.png);}
-    40%{background-image: url(../imgs/backround03.png);}
-    60%{background-image: url(../imgs/backround04.png);}
-    80%{background-image: url(../imgs/backround05.png);}
-    100%{background-image: url(../imgs/backround06.png);}
+    0%{background-image: url(../imgs/backround01.webp);}
+    20%{background-image: url(../imgs/backround02.webp);}
+    40%{background-image: url(../imgs/backround03.webp);}
+    60%{background-image: url(../imgs/backround04.webp);}
+    80%{background-image: url(../imgs/backround05.webp);}
+    100%{background-image: url(../imgs/backround06.webp);}
 }
 
 .navigation{
@@ -70,4 +70,13 @@ h1{
     top: 2%;
     font-size: 12px;
     color: rgb(79, 79, 79);
+}
+
+p a{
+    color: black;
+text-decoration: none;
+}
+
+p a:hover{
+    text-decoration: underline;
 }
