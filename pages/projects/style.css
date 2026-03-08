@@ -1,32 +1,91 @@
-html{
-    background-image: url('../../imgs/backround06.webp');
-
-    background-size: auto;
-    animation: slide 20s 2s infinite;
-    background-repeat: no-repeat;
-}
-
-.navigation{
-    align-items: center;
-    text-align: center;
-    justify-content: center;
-    display: flex;
-    flex-direction: column;
-    margin-top: 20%;
-}
-
-button{
-    background-color: transparent;
-    border: none;
-    margin-bottom: 20px;
-     dcolor: rgb(16, 16, 16);
-}
-
-button:hover{
-    text-decoration: underline;
-}
-
-.home{
-    background-color: rgb(234, 234, 234);
-    margin-top: 20%;
+body{
+    margin:0;
+    overflow-x:hidden;
     }
+    
+    .scroll-container{
+    display:flex;
+    }
+    
+    .panel{
+    position:relative;
+    min-width:100vw;
+    height:100vh;
+    overflow:hidden;
+    }
+    
+    .panel img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform:scale(1);
+    }
+    
+    .panel-text{
+    position:absolute;
+    bottom:12%;
+    left:8%;
+    
+    color:white;
+    font-size:clamp(40px,6vw,120px);
+    font-family:'American Typewriter', serif;
+    
+    opacity:0;
+    transform:translateY(60px);
+    }
+
+    .home{
+    position:fixed;
+    top:30px;
+    left:30px;
+    z-index:10;
+    background-color: black;
+    border: none;
+    color: aliceblue;
+    }
+
+    .home:hover{
+        background-color: transparent;
+        border: 1px solid rgb(24, 24, 24);
+        color: rgb(24, 24, 24);
+    }
+    
+    /* MOBILE VERSION */
+
+    @media (max-width:768px){
+
+        .scroll-container{
+        display:block;
+        }
+        
+        .panel{
+        width:100vw;
+        height:100vh;
+        }
+        
+        .panel img{
+        width:100%;
+        height:100%;
+        object-fit:cover;
+        display:block;
+        }
+        
+        /* show text without GSAP */
+        
+        .panel-text{
+        opacity:1;
+        transform:none;
+        
+        font-size:10vw;
+        bottom:15%;
+        left:8%;
+        }
+        
+        /* smaller home button */
+        
+        .home{
+        top:20px;
+        left:20px;
+        }
+        
+        }

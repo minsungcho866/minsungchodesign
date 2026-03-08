@@ -80,3 +80,50 @@ text-decoration: none;
 p a:hover{
     text-decoration: underline;
 }
+
+@media (max-width:768px){
+
+    html{
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        }
+    
+    /* TITLE */
+    
+    h1{
+    font-size:14vw;
+    margin-top:8%;
+    }
+    
+    
+    /* NAVIGATION STACK */
+    
+    .navigation{
+    flex-direction:column;
+    gap:14px;
+    
+    bottom:5%;
+    left:5%;
+    }
+    
+    
+    /* BUTTON SIZE */
+    
+    .button,
+    .btn{
+    font-size:16px;
+    padding:8px 14px;
+    }
+    
+    
+    /* TOP TEXT */
+    
+    .text{
+    font-size:12px;
+    right:5%;
+    top:13%;
+    }
+    
+    }
