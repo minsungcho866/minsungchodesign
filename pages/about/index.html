@@ -1,32 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>About</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>About — Minsung Cho</title>
+
+<!-- Fonts & CSS -->
+<link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
+<link rel="stylesheet" href="../../style.css">
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #0d0d0d;
+    color: #ffffff;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 120px auto 60px;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 20;
+    font-weight: 300;
+    margin-bottom: 20px;
+    color: rgb(235, 235, 235);
+  }
+
+  p {
+    font-size: 1.2rem;
+    text-align: justify;
+    color: #ccc;
+  }
+
+  /* ----------------- Hamburger ----------------- */
+  .hamburger {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 35px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10;
+  }
+
+  .hamburger div {
+    width: 100%;
+    height: 4px;
+    background-color: rgb(35, 181, 61);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger.active div:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+  }
+
+  .hamburger.active div:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active div:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+  }
+
+  .menu {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: rgba(0,0,0,0.8);
+    padding: 15px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 9;
+  }
+
+  .menu.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menu a button {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid rgb(35, 181, 61);
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+  }
+
+  .menu a button:hover {
+    background-color: rgb(35, 181, 61);
+    color: #000;
+  }
+
+  /* Back button */
+  .back-btn {
+    margin-top: 40px;
+  }
+</style>
 </head>
+
 <body>
-    <h1>About</h1>
-    <p>Studying at Parsons School of Design, Minsung Cho has been deeply 
-        committed to his design philosophy, which is about creating simple yet 
-        easy to understand design. From website design and booklet design to 
-        campaign design, he has demonstrated an exceptional ability to translate 
-        complex concepts into engaging and accessible content. Minsung’s work 
-        reflects not only his creative vision but an unwavering commitment to 
-        effective communication through design. His programs include simplicity, 
-        clarity, and his ability to deliver messages with accuracy and motivation. 
-        Whether it’s creating user- friendly websites, informative booklet, or 
-        creating engaging campaigns, Minsang’s programs always prioritize clarity 
-        and accessibility, and ensure that the intended message is closely aligned 
-        with the audience. With each project, Minsung is honing his skills and 
-        expanding his creative repertoire.  As he progresses through his academic 
-        and professional journey, Minsung remains focused on his goal of creating 
-        designs that are not only aesthetically pleasing but also convey ideas and 
-        messages to the audience.
-    </p>
-<div class="btn">
-    <a href="../../index.html"><button>HOME</button></a>
+
+<!-- Hamburger -->
+<div class="hamburger" id="hamburger">
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
+
+<!-- Menu -->
+<div class="menu" id="menu">
+  <a href="../../index.html"><button>Home</button></a>
+  <a href="../../index.html#projects"><button>Projects</button></a>
+  <a href="../../pages/contact/index.html"><button>Contact</button></a>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+  <h1>About</h1>
+  <p>
+    Studying at Parsons School of Design, Minsung Cho has been deeply 
+    committed to his design philosophy, which is about creating simple yet 
+    easy-to-understand design. From website design and booklet design to 
+    campaign design, he has demonstrated an exceptional ability to translate 
+    complex concepts into engaging and accessible content. Minsung’s work 
+    reflects not only his creative vision but an unwavering commitment to 
+    effective communication through design. His programs include simplicity, 
+    clarity, and his ability to deliver messages with accuracy and motivation. 
+    Whether it’s creating user-friendly websites, informative booklets, or 
+    engaging campaigns, Minsung’s work always prioritizes clarity and accessibility, 
+    ensuring that the intended message aligns with the audience. As he progresses 
+    through his academic and professional journey, Minsung remains focused on his goal 
+    of creating designs that are not only aesthetically pleasing but also convey 
+    ideas and messages to the audience.
+  </p>
+
+</div>
+
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const menu = document.getElementById("menu");
+
+  hamburger.addEventListener("click", ()=>{
+    hamburger.classList.toggle("active");
+    menu.classList.toggle("show");
+  });
+</script>
+
 </body>
 </html>

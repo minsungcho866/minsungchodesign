@@ -1,22 +1,184 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style.css">
-    <title>contact</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contact — Minsung Cho</title>
+
+<!-- Fonts & CSS -->
+<link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
+<link rel="stylesheet" href="../../style.css">
+
+<style>
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #171717;
+    color: #ffffff;
+    line-height: 1.7;
+  }
+
+  .container {
+    max-width: 800px;
+    margin: 120px auto 60px;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  h1 {
+    font-size: 20;
+    font-weight: 300;
+    margin-bottom: 30px;
+    color: #e1e1e1;
+  }
+
+  p {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #ccc;
+  }
+
+  p a {
+    color: #ccc;
+    text-decoration: none;
+    transition: all 0.2s ease;
+  }
+
+  p a:hover {
+    text-decoration: underline;
+    color: #fff;
+  }
+
+  /* ----------------- Hamburger ----------------- */
+  .hamburger {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 35px;
+    height: 30px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    z-index: 10;
+  }
+
+  .hamburger div {
+    width: 100%;
+    height: 4px;
+    background-color: rgb(35, 181, 61);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+  }
+
+  .hamburger.active div:nth-child(1) {
+    transform: rotate(45deg) translate(7px, 7px);
+  }
+
+  .hamburger.active div:nth-child(2) {
+    opacity: 0;
+  }
+
+  .hamburger.active div:nth-child(3) {
+    transform: rotate(-45deg) translate(8px, -8px);
+  }
+
+  .menu {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    background: rgba(0,0,0,0.8);
+    padding: 15px;
+    border-radius: 8px;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s ease;
+    z-index: 9;
+  }
+
+  .menu.show {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .menu a button {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid rgb(35, 181, 61);
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+  }
+
+  .menu a button:hover {
+    background-color: rgb(35, 181, 61);
+    color: #000;
+  }
+
+  /* Back button */
+  .back-btn {
+    margin-top: 40px;
+  }
+
+  .back-btn button {
+    background-color: transparent;
+    color: #fff;
+    border: 1px solid rgb(35, 181, 61);
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: all 0.2s ease;
+  }
+
+  .back-btn button:hover {
+    background-color: rgb(35, 181, 61);
+    color: #000;
+  }
+
+</style>
 </head>
+
 <body>
-    <h1>CONTACT</h1>
-    <p>
-        Email: <a href="mailto:ryancho8765@gmail.com">ryancho8765@gmail.com</a> <br><br>
-        
-        Phone: <a href="">-</a> <br><br>
-        
-        Instagram: <a href="https://instagram.com/minsung.wh" target="_blank">@minsung.wh</a> 
-        </p>
-<div class="btn">
-    <a href="../../index.html"><button>HOME</button></a>
+
+<!-- Hamburger -->
+<div class="hamburger" id="hamburger">
+  <div></div>
+  <div></div>
+  <div></div>
 </div>
+
+<!-- Menu -->
+<div class="menu" id="menu">
+  <a href="../../index.html"><button>Home</button></a>
+  <a href="../../pages/about/index.html"><button>About</button></a>
+  <a href="../../pages/projects/index.html"><button>Projects</button></a>
+</div>
+
+<!-- Main Content -->
+<div class="container">
+  <h1>Contact</h1>
+  <p>
+    Email: <a href="mailto:ryancho8765@gmail.com">ryancho8765@gmail.com</a> <br><br>
+    Phone: <a href="tel:-">-</a> <br><br>
+    Instagram: <a href="https://instagram.com/minsung.wh" target="_blank">@minsung.wh</a>
+  </p>
+
+<script>
+  const hamburger = document.getElementById("hamburger");
+  const menu = document.getElementById("menu");
+
+  hamburger.addEventListener("click", ()=>{
+    hamburger.classList.toggle("active");
+    menu.classList.toggle("show");
+  });
+</script>
+
 </body>
 </html>
