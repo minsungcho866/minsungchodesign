@@ -1,10 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/style.css">
-<link rel="preload" as="image" href="imgs/background01.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
+
+  <link rel="preload" as="image" href="imgs/background01.png">
 <link rel="preload" as="image" href="imgs/background02.png">
 <link rel="preload" as="image" href="imgs/background03.png">
 <link rel="preload" as="image" href="imgs/background04.png">
@@ -23,20 +26,161 @@
 <link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
 <link rel="manifest" href="favicon/site.webmanifest">
 <meta name="theme-color" content="#1e2420">
-
-    <title>MINSUNG CHO</title>
 </head>
 <body>
-    <h1>MINSUNG<br>CHO
-    </h1>
-    <p class="text"><a href="mailto:ryancho8765@gmail.com">
-    Ryancho8765@gmail.com
-    </p></a>
-<div class="navigation">
+  <div class="title">
+  <h1>MINSUNG CHO</h1>
+  <p>designer</p>
+</div>
+
+  <div class="navigation">
     <a href="pages/about/index.html"><button class="button">ABOUT</button></a>
     <a href="."><button class="button">PROJECTS</button></a>
     <a href="pages/contact/index.html"><button class="btn">CONTACT</button></a>
     </div>
-    
+
 </body>
 </html>
+
+<script type="module">
+  import * as THREE from "https://unpkg.com/three@0.161.0/build/three.module.js";
+  
+  /* ---------- Scene ---------- */
+  const scene = new THREE.Scene();
+  
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    window.innerWidth / window.innerHeight,
+    0.1,
+    1000
+  );
+  
+  // Camera at center
+  camera.position.set(0, 0, 0);
+  
+  const renderer = new THREE.WebGLRenderer({
+  antialias: true,
+  alpha: true
+});  renderer.setSize(window.innerWidth, window.innerHeight);
+  document.body.appendChild(renderer.domElement);
+  
+  const group = new THREE.Group();
+  scene.add(group);
+  
+  /* ---------- Images ---------- */
+  const images = [
+    "imgs/photo1.webp",
+    "imgs/photo2.webp",
+    "imgs/photo3.webp",
+    "imgs/photo4.webp",
+    "imgs/photo5.webp",
+    "imgs/photo6.webp"
+  ];
+  
+  const loader = new THREE.TextureLoader();
+  
+  /* ---------- Sphere layout ---------- */
+  const radius = 2.5;
+  const latSegments = 6;
+  const lonSegments = 12;
+  
+  let imgIndex = 0;
+  
+  for (let lat = 1; lat < latSegments; lat++) {
+    const theta = lat * Math.PI / latSegments;
+  
+    for (let lon = 0; lon < lonSegments; lon++) {
+      const phi = lon * 2 * Math.PI / lonSegments;
+  
+      const x = radius * Math.sin(theta) * Math.cos(phi);
+      const y = radius * Math.cos(theta);
+      const z = radius * Math.sin(theta) * Math.sin(phi);
+  
+      const path = images[imgIndex % images.length];
+      imgIndex++;
+  
+      const plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(1, 1),
+        new THREE.MeshBasicMaterial({
+          side: THREE.DoubleSide,
+          color: 0x333333
+        })
+      );
+  
+      plane.position.set(x, y, z);
+plane.lookAt(0, 0, 0);
+
+// rotate image upright
+plane.rotateZ(Math.PI);
+
+group.add(plane);
+  
+      /* ---------- Load texture ---------- */
+      loader.load(path, texture => {
+  
+        // Fix WebGL vertical flip
+        texture.flipY = false;
+  
+        // Flip image horizontally (mirror)
+        texture.wrapS = THREE.RepeatWrapping;
+        texture.repeat.x = -1;
+  
+        const img = texture.image;
+        const aspect = img.width / img.height;
+  
+        // Resize plane to image aspect ratio
+        plane.geometry.dispose();
+        plane.geometry = new THREE.PlaneGeometry(1, 1 / aspect);
+  
+        plane.material.map = texture;
+        plane.material.color.set(0xffffff);
+        plane.material.needsUpdate = true;
+      });
+    }
+  }
+  
+  /* ---------- Drag to look around ---------- */
+  let dragging = false;
+  let lastX = 0;
+  let lastY = 0;
+  
+  renderer.domElement.addEventListener("mousedown", e => {
+    dragging = true;
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+  
+  renderer.domElement.addEventListener("mouseup", () => dragging = false);
+  renderer.domElement.addEventListener("mouseleave", () => dragging = false);
+  
+  renderer.domElement.addEventListener("mousemove", e => {
+    if (!dragging) return;
+  
+    const dx = e.clientX - lastX;
+    const dy = e.clientY - lastY;
+  
+    camera.rotation.y -= dx * 0.002;
+    camera.rotation.x -= dy * 0.002;
+  
+    lastX = e.clientX;
+    lastY = e.clientY;
+  });
+  
+  /* ---------- Animation ---------- */
+  function animate() {
+    requestAnimationFrame(animate);
+  
+    // Globe rotates around viewer
+    group.rotation.y += 0.0015;
+  
+    renderer.render(scene, camera);
+  }
+  animate();
+  
+  /* ---------- Resize ---------- */
+  window.addEventListener("resize", () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+  </script>
