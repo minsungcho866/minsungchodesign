@@ -5,136 +5,115 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Projects — Minsung Cho</title>
 
-<!-- Fonts & CSS -->
 <link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
-<link rel="stylesheet" href="../../style.css">
 
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #181818;
-    color: #ffffff;
-    line-height: 1.7;
-  }
+body {
+  margin: 0;
+  background: #181818;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-  .container {
-    max-width: 1000px;
-    margin: 120px auto 60px;
-    padding: 0 20px;
-    text-align: center;
-  }
+/* Container */
+.container {
+  max-width: 900px;
+  margin: 120px auto;
+  padding: 0 20px;
+}
 
-  h1 {
-    font-size: 20;
-    font-weight: 300;
-    margin-bottom: 40px;
-    color: rgb(232, 232, 232);
-  }
+/* Title */
+h1 {
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 60px;
+}
 
-  .projects-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 20px;
-  }
+/* List */
+.project-list {
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+}
 
-  .project-card {
-    background: #0d0d0d;
-    border: 1px solid rgb(203, 203, 203);
-    border-radius: 8px;
-    overflow: hidden;
-    cursor: pointer;
-    transition: transform 0.3s ease;
-  }
+/* Items */
+.project-item {
+  font-size: 28px;
+  color: #aaa;
+  text-decoration: none;
+  transition: 0.3s;
+}
 
-  .project-card:hover {
-    transform: scale(1.05);
-    background: rgb(20, 20, 20);
-  }
+.project-item:hover {
+  color: #fff;
+}
 
-  .project-card img {
-    width: 100%;
-    display: block;
-  }
+/* Hover image */
+.hover-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 300px;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.95);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+}
 
-  .project-card h2 {
-    margin: 10px;
-    font-size: 1.2rem;
-    color: #fff;
-    text-decoration: none;
-  }
+.hover-image img {
+  width: 100%;
+  display: block;
+}
 
-  /* ----------------- Hamburger ----------------- */
-  .hamburger {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 35px;
-    height: 30px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 10;
-  }
+/* Hamburger */
+.hamburger {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 35px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.hamburger div {
+  height: 3px;
+  background: #fff;
+  transition: 0.3s;
+}
+.hamburger.active div:nth-child(1){
+  transform: rotate(45deg) translate(6px,6px);
+}
+.hamburger.active div:nth-child(2){opacity:0;}
+.hamburger.active div:nth-child(3){
+  transform: rotate(-45deg) translate(7px,-7px);
+}
 
-  .hamburger div {
-    width: 100%;
-    height: 4px;
-    background-color: rgb(35, 181, 61);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-  }
-
-  .hamburger.active div:nth-child(1) {
-    transform: rotate(45deg) translate(7px, 7px);
-  }
-
-  .hamburger.active div:nth-child(2) {
-    opacity: 0;
-  }
-
-  .hamburger.active div:nth-child(3) {
-    transform: rotate(-45deg) translate(8px, -8px);
-  }
-
-  .menu {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    background: rgba(0,0,0,0.8);
-    padding: 15px;
-    border-radius: 8px;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    z-index: 9;
-  }
-
-  .menu.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .menu a button {
-    background-color: transparent;
-    color: #fff;
-    border: 1px solid rgb(35, 181, 61);
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all 0.2s ease;
-  }
-
-  .menu a button:hover {
-    background-color: rgb(35, 181, 61);
-    color: #000;
-  }
+/* Menu */
+.menu {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+}
+.menu.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.menu a {
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+.menu a:hover {
+  text-decoration: underline;
+}
 </style>
 </head>
 
@@ -142,58 +121,76 @@
 
 <!-- Hamburger -->
 <div class="hamburger" id="hamburger">
-  <div></div>
-  <div></div>
-  <div></div>
+  <div></div><div></div><div></div>
 </div>
 
 <!-- Menu -->
 <div class="menu" id="menu">
-  <a href="../../index.html"><button>Home</button></a>
-  <a href="../../pages/about/index.html"><button>About</button></a>
-  <a href="../../pages/contact/index.html"><button>Contact</button></a>
+  <a href="../../index.html">Home</a>
+  <a href="../../pages/about/index.html">About</a>
+  <a href="../../pages/contact/index.html">Contact</a>
 </div>
 
-<!-- Main Content -->
+<!-- Content -->
 <div class="container">
   <h1>Projects</h1>
 
-  <div class="projects-grid">
-    <a href="project1.html" class="project-card">
-      <img src="../imgs/background01.webp" alt="Project 1">
-      <h2>Wallet Saver Map</h2>
-    </a>
-    <a href="project2.html" class="project-card">
-      <img src="../imgs/background02.webp" alt="Project 2">
-      <h2>Home</h2>
-    </a>
-    <a href="project3.html" class="project-card">
-      <img src="../imgs/background03.webp" alt="Project 3">
-      <h2>12 Rules of Life</h2>
-    </a>
-    <a href="project4.html" class="project-card">
-      <img src="../imgs/background04.webp" alt="Project 4">
-      <h2>History of Video Games</h2>
-    </a>
-    <a href="project5.html" class="project-card">
-      <img src="../imgs/background05.webp" alt="Project 5">
-      <h2>Cole + Ice</h2>
-    </a>
-    <a href="project6.html" class="project-card">
-        <img src="../imgs/background06.webp" alt="Project 5">
-        <h2>Solar System</h2>
-      </a>
+  <div class="project-list">
+    <a href="project1.html" class="project-item" data-img="../imgs/background01.webp">Wallet Saver Map</a>
+    <a href="project2.html" class="project-item" data-img="../imgs/background02.webp">Home</a>
+    <a href="project3.html" class="project-item" data-img="../imgs/background03.webp">12 Rules of Life</a>
+    <a href="project4.html" class="project-item" data-img="../imgs/background04.webp">History of Video Games</a>
+    <a href="project5.html" class="project-item" data-img="../imgs/background05.webp">Cole + Ice</a>
+    <a href="project6.html" class="project-item" data-img="../imgs/background06.webp">Solar System</a>
+    <a href="project7.html" class="project-item" data-img="../imgs/background07.webp">Typeface Archive</a>
+    <a href="project8.html" class="project-item" data-img="../imgs/background08.webp">Curvo 2</a>
   </div>
 </div>
 
-<script>
-  const hamburger = document.getElementById("hamburger");
-  const menu = document.getElementById("menu");
+<!-- Hover Image -->
+<div class="hover-image" id="hoverImage">
+  <img src="" alt="">
+</div>
 
-  hamburger.addEventListener("click", ()=>{
-    hamburger.classList.toggle("active");
-    menu.classList.toggle("show");
+<script>
+/* Hamburger */
+const hamburger = document.getElementById("hamburger");
+const menu = document.getElementById("menu");
+
+hamburger.onclick = () => {
+  hamburger.classList.toggle("active");
+  menu.classList.toggle("show");
+};
+
+/* Hover Image */
+const hoverImage = document.getElementById("hoverImage");
+const imgTag = hoverImage.querySelector("img");
+
+document.querySelectorAll(".project-item").forEach(item => {
+
+  item.addEventListener("mouseenter", () => {
+    imgTag.src = item.dataset.img;
+    hoverImage.style.opacity = 1;
   });
+
+  item.addEventListener("mouseleave", () => {
+    hoverImage.style.opacity = 0;
+  });
+
+  item.addEventListener("mousemove", (e) => {
+    hoverImage.style.left = (e.clientX + 20) + "px";
+    hoverImage.style.top = (e.clientY + 20) + "px";
+  });
+
+});
+
+/* Extra safety: hide if not directly on text */
+document.addEventListener("mousemove", (e) => {
+  const el = document.elementFromPoint(e.clientX, e.clientY);
+  if (!el || !el.classList.contains("project-item")) {
+    hoverImage.style.opacity = 0;
+  }
+});
 </script>
 
 </body>

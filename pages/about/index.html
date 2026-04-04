@@ -5,115 +5,97 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>About — Minsung Cho</title>
 
-<!-- Fonts & CSS -->
 <link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
-<link rel="stylesheet" href="../../style.css">
 
 <style>
-  body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
-    background-color: #0d0d0d;
-    color: #ffffff;
-    line-height: 1.7;
-  }
+body {
+  margin: 0;
+  background: #181818;
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+}
 
-  .container {
-    max-width: 900px;
-    margin: 120px auto 60px;
-    padding: 0 20px;
-    text-align: center;
-  }
+/* Layout */
+.container {
+  max-width: 900px;
+  margin: 120px auto;
+  padding: 0 20px;
+}
 
-  h1 {
-    font-size: 20;
-    font-weight: 300;
-    margin-bottom: 20px;
-    color: rgb(235, 235, 235);
-  }
+/* Title */
+h1 {
+  font-size: 20px;
+  font-weight: 300;
+  margin-bottom: 60px;
+}
 
-  p {
-    font-size: 1.2rem;
-    text-align: justify;
-    color: #ccc;
-  }
+/* Proximity text */
+.about-text {
+  font-size: 28px;
+  line-height: 1.6;
+  color: #aaa;
+  max-width: 700px;
 
-  /* ----------------- Hamburger ----------------- */
-  .hamburger {
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    width: 35px;
-    height: 30px;
-    cursor: pointer;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    z-index: 10;
-  }
+  text-align: justify;
+  text-align-last: left;
 
-  .hamburger div {
-    width: 100%;
-    height: 4px;
-    background-color: rgb(35, 181, 61);
-    border-radius: 2px;
-    transition: all 0.3s ease;
-  }
+  word-break: keep-all;       /* prevents weird breaks */
+  overflow-wrap: break-word;  /* avoids overflow */
+}
 
-  .hamburger.active div:nth-child(1) {
-    transform: rotate(45deg) translate(7px, 7px);
-  }
+.about-text span {
+  display: inline-block;
+  transition: transform 0.15s ease, color 0.2s ease;
+}
 
-  .hamburger.active div:nth-child(2) {
-    opacity: 0;
-  }
+/* Hamburger */
+.hamburger {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  width: 35px;
+  height: 30px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.hamburger div {
+  height: 3px;
+  background: #fff;
+  transition: 0.3s;
+}
+.hamburger.active div:nth-child(1){
+  transform: rotate(45deg) translate(6px,6px);
+}
+.hamburger.active div:nth-child(2){opacity:0;}
+.hamburger.active div:nth-child(3){
+  transform: rotate(-45deg) translate(7px,-7px);
+}
 
-  .hamburger.active div:nth-child(3) {
-    transform: rotate(-45deg) translate(8px, -8px);
-  }
-
-  .menu {
-    position: absolute;
-    top: 70px;
-    right: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    background: rgba(0,0,0,0.8);
-    padding: 15px;
-    border-radius: 8px;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    z-index: 9;
-  }
-
-  .menu.show {
-    opacity: 1;
-    pointer-events: auto;
-  }
-
-  .menu a button {
-    background-color: transparent;
-    color: #fff;
-    border: 1px solid rgb(35, 181, 61);
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 5px;
-    transition: all 0.2s ease;
-  }
-
-  .menu a button:hover {
-    background-color: rgb(35, 181, 61);
-    color: #000;
-  }
-
-  /* Back button */
-  .back-btn {
-    margin-top: 40px;
-  }
+/* Menu */
+.menu {
+  position: absolute;
+  top: 70px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;
+  pointer-events: none;
+  transition: 0.3s;
+}
+.menu.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+.menu a {
+  color: #fff;
+  text-decoration: none;
+  margin-bottom: 10px;
+}
+.menu a:hover {
+  text-decoration: underline;
+}
 </style>
 </head>
 
@@ -121,48 +103,89 @@
 
 <!-- Hamburger -->
 <div class="hamburger" id="hamburger">
-  <div></div>
-  <div></div>
-  <div></div>
+  <div></div><div></div><div></div>
 </div>
 
 <!-- Menu -->
 <div class="menu" id="menu">
-  <a href="../../index.html"><button>Home</button></a>
-  <a href="../../index.html#projects"><button>Projects</button></a>
-  <a href="../../pages/contact/index.html"><button>Contact</button></a>
+  <a href="../../index.html">Home</a>
+  <a href="../../pages/projects/index.html">Projects</a>
+  <a href="../../pages/contact/index.html">Contact</a>
 </div>
 
-<!-- Main Content -->
+<!-- Content -->
 <div class="container">
   <h1>About</h1>
-  <p>
-    Studying at Parsons School of Design, Minsung Cho has been deeply 
-    committed to his design philosophy, which is about creating simple yet 
-    easy-to-understand design. From website design and booklet design to 
-    campaign design, he has demonstrated an exceptional ability to translate 
-    complex concepts into engaging and accessible content. Minsung’s work 
-    reflects not only his creative vision but an unwavering commitment to 
-    effective communication through design. His programs include simplicity, 
-    clarity, and his ability to deliver messages with accuracy and motivation. 
-    Whether it’s creating user-friendly websites, informative booklets, or 
-    engaging campaigns, Minsung’s work always prioritizes clarity and accessibility, 
-    ensuring that the intended message aligns with the audience. As he progresses 
-    through his academic and professional journey, Minsung remains focused on his goal 
-    of creating designs that are not only aesthetically pleasing but also convey 
-    ideas and messages to the audience.
-  </p>
 
+  <div class="about-text" id="aboutText">
+    Minsung Cho is a graphic designer 
+    currently studying at Parsons School of Design, 
+    with a focus on clarity, 
+    simplicity, and communication. His work translates 
+    complex ideas into accessible visual systems 
+    across digital and print. Through independent and 
+    collaborative projects, 
+    he develops structured and thoughtful solutions that 
+    prioritize understanding and engagement. 
+    He has served in the Republic of Korea Army 
+    as a driver and interpreter 
+    during joint operations with U.S. forces, 
+    strengthening his ability to communicate 
+    across contexts with precision. 
+    His practice continues to evolve 
+    through experimentation 
+    and disciplined thinking.
+  </div>
 </div>
 
 <script>
-  const hamburger = document.getElementById("hamburger");
-  const menu = document.getElementById("menu");
+/* Hamburger */
+const hamburger = document.getElementById("hamburger");
+const menu = document.getElementById("menu");
 
-  hamburger.addEventListener("click", ()=>{
-    hamburger.classList.toggle("active");
-    menu.classList.toggle("show");
+hamburger.onclick = () => {
+  hamburger.classList.toggle("active");
+  menu.classList.toggle("show");
+};
+
+/* -------- Proximity Text -------- */
+const text = document.getElementById("aboutText");
+const letters = text.innerText.split("");
+
+text.innerHTML = letters.map(letter => {
+  if(letter === " ") return " ";
+  return `<span>${letter}</span>`;
+}).join("");
+
+const spans = text.querySelectorAll("span");
+
+document.addEventListener("mousemove", (e) => {
+  spans.forEach(span => {
+
+    const rect = span.getBoundingClientRect();
+    const cx = rect.left + rect.width / 2;
+    const cy = rect.top + rect.height / 2;
+
+    const dx = e.clientX - cx;
+    const dy = e.clientY - cy;
+
+    const dist = Math.sqrt(dx * dx + dy * dy);
+    const maxDist = 120;
+
+    if (dist < maxDist) {
+      const force = (maxDist - dist) / maxDist;
+
+      span.style.transform = `
+        translate(${dx * 0.05 * force}px, ${dy * 0.05 * force}px)
+      `;
+      span.style.color = "#fff";
+    } else {
+      span.style.transform = "translate(0,0)";
+      span.style.color = "#aaa";
+    }
+
   });
+});
 </script>
 
 </body>
