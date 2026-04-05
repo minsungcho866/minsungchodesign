@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PDF Book Viewer</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+
+<style>
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #111;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Viewer */
+#viewer {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 20px;
+}
+
+/* Pages */
+canvas {
+  max-height: 90vh;
+  width: auto;
+  height: auto;
+  background: #222;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+}
+
+/* Controls */
+.controls {
+  position: fixed;
+  bottom: 20px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  background: white;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div id="viewer"></div>
+
+<div class="controls">
+  <button onclick="prev()">Prev</button>
+  <button onclick="next()">Next</button>
+</div>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc =
+  "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+
+const url = "pdfs/home2.pdf";
+
+let pdf;
+let current = 1;
+
+/* Load PDF */
+pdfjsLib.getDocument(url).promise.then(doc => {
+  pdf = doc;
+  render();
+});
+
+/* Render */
+async function render() {
+  const container = document.getElementById("viewer");
+  container.innerHTML = "";
+
+  if (current === 1) {
+    // COVER
+    const canvas = document.createElement("canvas");
+    container.appendChild(canvas);
+    await drawPage(1, canvas);
+  } else {
+    // SPREAD
+    const left = document.createElement("canvas");
+    const right = document.createElement("canvas");
+
+    container.appendChild(left);
+    container.appendChild(right);
+
+    await drawPage(current, left);
+    await drawPage(current + 1, right);
+  }
+}
+
+/* Draw page (perfect ratio) */
+async function drawPage(num, canvas) {
+  if (num > pdf.numPages) return;
+
+  const page = await pdf.getPage(num);
+  const viewport = page.getViewport({ scale: 1 });
+
+  const maxHeight = window.innerHeight * 0.9;
+  const scale = maxHeight / viewport.height;
+
+  const scaledViewport = page.getViewport({ scale });
+
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = scaledViewport.width;
+  canvas.height = scaledViewport.height;
+
+  await page.render({
+    canvasContext: ctx,
+    viewport: scaledViewport
+  }).promise;
+}
+
+/* Navigation */
+function next() {
+  if (current === 1) {
+    current = 2;
+  } else if (current + 2 <= pdf.numPages) {
+    current += 2;
+  }
+  render();
+}
+
+function prev() {
+  if (current === 2) {
+    current = 1;
+  } else if (current > 2) {
+    current -= 2;
+  }
+  render();
+}
+
+/* Resize */
+window.addEventListener("resize", render);
+</script>
+
+</body>
+</html>

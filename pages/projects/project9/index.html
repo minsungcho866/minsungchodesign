@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Time Constructs the Present</title>
+
+<style>
+  body {
+    margin: 0;
+    background: #f2f2f2;
+    overflow: hidden;
+    font-family: monospace;
+  }
+
+  canvas {
+    display: block;
+  }
+
+  .label {
+    position: fixed;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    opacity: 0.4;
+  }
+</style>
+</head>
+
+<body>
+
+<canvas id="canvas"></canvas>
+<video id="video" autoplay playsinline style="display:none;"></video>
+
+<div class="label">
+  TIME CONSTRUCTS THE PRESENT
+</div>
+
+<script>
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+const video = document.getElementById("video");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+// CAMERA
+navigator.mediaDevices.getUserMedia({ video: true })
+  .then(stream => {
+    video.srcObject = stream;
+    video.play();
+  });
+
+// OFFSCREEN
+const offCanvas = document.createElement("canvas");
+const offCtx = offCanvas.getContext("2d");
+
+// SETTINGS
+const cellSize = 12;
+const brightnessThreshold = 150;
+const motionThreshold = 12;
+
+// STATE
+let grid = [];
+let previousGray = null;
+
+function initGrid(size) {
+  grid = new Array(size).fill("");
+}
+
+// ⏰ TIME
+function getTime() {
+  const now = new Date();
+  return {
+    h: now.getHours().toString().padStart(2, "0"),
+    m: now.getMinutes().toString().padStart(2, "0"),
+    s: now.getSeconds().toString().padStart(2, "0")
+  };
+}
+
+// 🎯 LARGE TYPOGRAPHIC TIME (clean + centered)
+function getTimePattern() {
+  const { h, m } = getTime();
+
+  return [
+    "   " + h + "   ",
+    "        ",
+    "   " + m + "   "
+  ];
+}
+
+function draw() {
+  requestAnimationFrame(draw);
+
+  if (video.readyState < 2) return;
+
+  const w = Math.floor(canvas.width / cellSize);
+  const h = Math.floor(canvas.height / cellSize);
+
+  if (grid.length !== w * h) {
+    initGrid(w * h);
+  }
+
+  offCanvas.width = w;
+  offCanvas.height = h;
+
+  offCtx.drawImage(video, 0, 0, w, h);
+  const frame = offCtx.getImageData(0, 0, w, h);
+  const data = frame.data;
+
+  let gray = new Uint8Array(w * h);
+
+  for (let i = 0; i < w * h; i++) {
+    gray[i] = (data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2]) / 3;
+  }
+
+  // background
+  ctx.fillStyle = "#f2f2f2";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+  const timePattern = getTimePattern();
+
+  const startX = Math.floor(w / 2 - timePattern[0].length / 2);
+  const startY = Math.floor(h / 2 - timePattern.length / 2);
+
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  for (let y = 0; y < h; y++) {
+    for (let x = 0; x < w; x++) {
+
+      const i = y * w + x;
+      const brightness = gray[i];
+
+      let motion = 0;
+      if (previousGray) {
+        motion = Math.abs(gray[i] - previousGray[i]);
+      }
+
+      let char = "";
+
+      // 🎯 FOREGROUND TIME (dominant)
+      const inTime =
+        y >= startY &&
+        y < startY + timePattern.length &&
+        x >= startX &&
+        x < startX + timePattern[0].length;
+
+      if (inTime) {
+        const t = timePattern[y - startY][x - startX];
+        if (t !== " ") char = t;
+      }
+
+      // 🌫️ BACKGROUND FIELD (subtle)
+      else if (brightness < brightnessThreshold) {
+
+        if (motion > motionThreshold || !grid[i]) {
+          grid[i] = Math.random() > 0.7 ? "." : "";
+        }
+
+        char = grid[i];
+      }
+
+      if (char) {
+        ctx.fillStyle = inTime ? "#000" : "#999";
+        ctx.font = inTime
+          ? `${cellSize * 2.2}px monospace`
+          : `${cellSize}px monospace`;
+
+        ctx.fillText(
+          char,
+          x * cellSize + cellSize / 2,
+          y * cellSize + cellSize / 2
+        );
+      }
+    }
+  }
+
+  previousGray = gray;
+}
+
+draw();
+</script>
+
+</body>
+</html>

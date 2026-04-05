@@ -59,6 +59,7 @@ h1 {
   transform: scale(0.95);
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 100;
+  will-change: transform;
 }
 
 .hover-image img {
@@ -136,14 +137,15 @@ h1 {
   <h1>Projects</h1>
 
   <div class="project-list">
-    <a href="project1.html" class="project-item" data-img="../imgs/background01.webp">Wallet Saver Map</a>
-    <a href="project2.html" class="project-item" data-img="../imgs/background02.webp">Home</a>
+    <a href="https://chom866.interactive.rodeo/studio/projects/P2/mainpage/index.html" class="project-item" data-img="../imgs/background01.webp">Wallet Saver Map</a>
+    <a href="project2/index.html" class="project-item" data-img="../imgs/background02.webp">Home</a>
     <a href="project3.html" class="project-item" data-img="../imgs/background03.webp">12 Rules of Life</a>
     <a href="project4.html" class="project-item" data-img="../imgs/background04.webp">History of Video Games</a>
-    <a href="project5.html" class="project-item" data-img="../imgs/background05.webp">Cole + Ice</a>
+    <a href="https://chom866.interactive.rodeo/studio/projects/P3/mainpage.html" class="project-item" data-img="../imgs/background05.webp">Cole + Ice</a>
     <a href="project6.html" class="project-item" data-img="../imgs/background06.webp">Solar System</a>
     <a href="project7.html" class="project-item" data-img="../imgs/background07.webp">Typeface Archive</a>
     <a href="project8.html" class="project-item" data-img="../imgs/background08.webp">Curvo 2</a>
+    <a href="project9/index.html" class="project-item" data-img="../imgs/photo7.webp">TIME CONSTRUCTS THE PRESENT</a>  
   </div>
 </div>
 
@@ -171,20 +173,43 @@ document.querySelectorAll(".project-item").forEach(item => {
   item.addEventListener("mouseenter", () => {
     imgTag.src = item.dataset.img;
     hoverImage.style.opacity = 1;
+    hoverImage.style.transform = "scale(1)";
   });
 
   item.addEventListener("mouseleave", () => {
     hoverImage.style.opacity = 0;
+    hoverImage.style.transform = "scale(0.95)";
   });
 
   item.addEventListener("mousemove", (e) => {
-    hoverImage.style.left = (e.clientX + 20) + "px";
-    hoverImage.style.top = (e.clientY + 20) + "px";
+    const offset = 20;
+
+    const imgWidth = hoverImage.offsetWidth;
+    const imgHeight = hoverImage.offsetHeight;
+
+    const viewportWidth = window.innerWidth;
+    const viewportHeight = window.innerHeight;
+
+    let x = e.clientX + offset;
+    let y = e.clientY + offset;
+
+    // Flip horizontally if overflow right
+    if (x + imgWidth > viewportWidth) {
+      x = e.clientX - imgWidth - offset;
+    }
+
+    // Flip vertically if overflow bottom
+    if (y + imgHeight > viewportHeight) {
+      y = e.clientY - imgHeight - offset;
+    }
+
+    hoverImage.style.left = x + "px";
+    hoverImage.style.top = y + "px";
   });
 
 });
 
-/* Extra safety: hide if not directly on text */
+/* Extra safety */
 document.addEventListener("mousemove", (e) => {
   const el = document.elementFromPoint(e.clientX, e.clientY);
   if (!el || !el.classList.contains("project-item")) {

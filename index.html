@@ -120,7 +120,9 @@ const images = [
   "imgs/photo3.webp",
   "imgs/photo4.webp",
   "imgs/photo5.webp",
-  "imgs/photo6.webp"
+  "imgs/photo6.webp",
+  "imgs/photo7.webp",
+  "imgs/photo8.webp"
 ];
 
 const urls = [
@@ -257,7 +259,7 @@ function animate(){
 
   rows.forEach((row,i)=>{
     const dir = i % 2 === 0 ? 1 : -1;
-    row.rotation.y += 0.002 * dir;
+    row.rotation.y += 0.001 * dir;
   });
 
   renderer.render(scene,camera);
