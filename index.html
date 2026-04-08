@@ -140,13 +140,13 @@ const loader = new THREE.TextureLoader();
 const radius = 2;
 const latSegments = 10;
 const lonSegments = 20;
-const baseSize = 0.45;
+const baseWidth = 0.45; // width
+const baseHeight = baseWidth * 9/16; // 16:9 ratio
 
 let imgIndex = 0;
 
 /* Create globe rows */
 for(let lat=1; lat<latSegments; lat++){
-
   const rowGroup = new THREE.Group();
   group.add(rowGroup);
   rows.push(rowGroup);
@@ -154,7 +154,6 @@ for(let lat=1; lat<latSegments; lat++){
   const theta = lat * Math.PI / latSegments;
 
   for(let lon=0; lon<lonSegments; lon++){
-
     const phi = lon * 2 * Math.PI / lonSegments;
 
     const x = radius*Math.sin(theta)*Math.cos(phi);
@@ -162,13 +161,13 @@ for(let lat=1; lat<latSegments; lat++){
     const z = radius*Math.sin(theta)*Math.sin(phi);
 
     const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(baseSize,baseSize),
+      new THREE.PlaneGeometry(baseWidth, baseHeight),
       new THREE.MeshStandardMaterial({side:THREE.DoubleSide})
     );
 
     plane.position.set(x,y,z);
     plane.lookAt(0,0,0);
-    plane.rotateZ(Math.PI);
+    // plane.rotateZ(Math.PI); <-- removed this line to prevent vertical flip
 
     rowGroup.add(plane);
 
@@ -176,15 +175,24 @@ for(let lat=1; lat<latSegments; lat++){
     imgIndex++;
 
     loader.load(path, tex=>{
-      tex.flipY=false;
-      tex.wrapS = THREE.RepeatWrapping;
-      tex.repeat.x = -1;
+      tex.flipY = false; // no reflection
 
-      const aspect = tex.image.width/tex.image.height;
-      plane.geometry.dispose();
-      plane.geometry = new THREE.PlaneGeometry(baseSize, baseSize/aspect);
+      // Monochrome conversion
+      const img = tex.image;
+      const canvas = document.createElement('canvas');
+      canvas.width = img.width;
+      canvas.height = img.height;
+      const ctx = canvas.getContext('2d');
+      ctx.drawImage(img, 0, 0);
+      const imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
+      const data = imgData.data;
+      for(let i=0;i<data.length;i+=4){
+        const gray = 0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];
+        data[i]=data[i+1]=data[i+2]=gray;
+      }
+      ctx.putImageData(imgData,0,0);
 
-      plane.material.map = tex;
+      plane.material.map = new THREE.CanvasTexture(canvas);
       plane.material.needsUpdate = true;
     });
   }
@@ -214,10 +222,8 @@ let hovered=null;
 renderer.domElement.addEventListener("mousemove",e=>{
   mouse.x = (e.clientX/innerWidth)*2-1;
   mouse.y = -(e.clientY/innerHeight)*2+1;
-
   raycaster.setFromCamera(mouse,camera);
 
-  // IMPORTANT: check inside rows
   const objects = rows.flatMap(r=>r.children);
   const hits = raycaster.intersectObjects(objects);
 
@@ -242,8 +248,8 @@ renderer.domElement.addEventListener("mousemove",e=>{
 renderer.domElement.addEventListener("click",e=>{
   mouse.x = (e.clientX/innerWidth)*2-1;
   mouse.y = -(e.clientY/innerHeight)*2+1;
-
   raycaster.setFromCamera(mouse,camera);
+
   const objects = rows.flatMap(r=>r.children);
   const hits = raycaster.intersectObjects(objects);
 
@@ -253,7 +259,7 @@ renderer.domElement.addEventListener("click",e=>{
   }
 });
 
-/* 🎯 Alternating rotation */
+/* Alternating rotation */
 function animate(){
   requestAnimationFrame(animate);
 
