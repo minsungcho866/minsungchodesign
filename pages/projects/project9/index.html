@@ -45,28 +45,76 @@ const video = document.getElementById("video");
 canvas.width = window.innerWidth;
 canvas.height = window.innerHeight;
 
-// CAMERA
+// 🎥 CAMERA
 navigator.mediaDevices.getUserMedia({ video: true })
   .then(stream => {
     video.srcObject = stream;
     video.play();
-  });
+  })
+  .catch(err => console.error("Camera error:", err));
 
-// OFFSCREEN
+// 📦 OFFSCREEN
 const offCanvas = document.createElement("canvas");
 const offCtx = offCanvas.getContext("2d");
 
-// SETTINGS
+// ⚙️ SETTINGS
 const cellSize = 12;
 const brightnessThreshold = 150;
 const motionThreshold = 12;
 
-// STATE
+// 🌍 DATA STATE
+let weatherData = {
+  rain: 0,
+  pollution: 3
+};
+
+let smoothRain = 0;
+let smoothPollution = 3;
+
+// 🔑 API KEY (⚠️ replace if needed)
+const API_KEY = "YOUR_API_KEY_HERE";
+
+// 📍 NEW YORK
+const lat = 40.7128;
+const lon = -74.0060;
+
+// 🌧 + 🌫 FETCH
+async function fetchEnvironment() {
+  try {
+    // WEATHER
+    const weatherRes = await fetch(
+      `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+    );
+    const weatherJson = await weatherRes.json();
+
+    weatherData.rain = weatherJson.rain
+      ? weatherJson.rain["1h"] || weatherJson.rain["3h"] || 0
+      : 0;
+
+    // AIR POLLUTION
+    const airRes = await fetch(
+      `https://api.openweathermap.org/data/2.5/air_pollution?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+    );
+    const airJson = await airRes.json();
+
+    if (airJson.list && airJson.list[0]) {
+      weatherData.pollution = airJson.list[0].main.aqi;
+    }
+
+  } catch (e) {
+    console.error("API error:", e);
+  }
+}
+
+fetchEnvironment();
+setInterval(fetchEnvironment, 60000);
+
+// 🧠 GRID
 let grid = [];
 let previousGray = null;
 
 function initGrid(size) {
-  grid = new Array(size).fill("");
+  grid = new Array(size).fill(false);
 }
 
 // ⏰ TIME
@@ -74,15 +122,13 @@ function getTime() {
   const now = new Date();
   return {
     h: now.getHours().toString().padStart(2, "0"),
-    m: now.getMinutes().toString().padStart(2, "0"),
-    s: now.getSeconds().toString().padStart(2, "0")
+    m: now.getMinutes().toString().padStart(2, "0")
   };
 }
 
-// 🎯 LARGE TYPOGRAPHIC TIME (clean + centered)
+// 🎯 TIME PATTERN
 function getTimePattern() {
   const { h, m } = getTime();
-
   return [
     "   " + h + "   ",
     "        ",
@@ -90,10 +136,19 @@ function getTimePattern() {
   ];
 }
 
+// ✨ SMOOTH
+function updateSmooth() {
+  smoothRain += (weatherData.rain - smoothRain) * 0.05;
+  smoothPollution += (weatherData.pollution - smoothPollution) * 0.05;
+}
+
+// 🎨 DRAW
 function draw() {
   requestAnimationFrame(draw);
 
   if (video.readyState < 2) return;
+
+  updateSmooth();
 
   const w = Math.floor(canvas.width / cellSize);
   const h = Math.floor(canvas.height / cellSize);
@@ -112,20 +167,16 @@ function draw() {
   let gray = new Uint8Array(w * h);
 
   for (let i = 0; i < w * h; i++) {
-    gray[i] = (data[i * 4] + data[i * 4 + 1] + data[i * 4 + 2]) / 3;
+    gray[i] = (data[i*4] + data[i*4+1] + data[i*4+2]) / 3;
   }
 
   // background
   ctx.fillStyle = "#f2f2f2";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  const timePattern = getTimePattern();
-
-  const startX = Math.floor(w / 2 - timePattern[0].length / 2);
-  const startY = Math.floor(h / 2 - timePattern.length / 2);
-
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
+  const pattern = getTimePattern();
+  const startX = Math.floor(w / 2 - pattern[0].length / 2);
+  const startY = Math.floor(h / 2 - pattern.length / 2);
 
   for (let y = 0; y < h; y++) {
     for (let x = 0; x < w; x++) {
@@ -138,49 +189,76 @@ function draw() {
         motion = Math.abs(gray[i] - previousGray[i]);
       }
 
-      let char = "";
-
-      // 🎯 FOREGROUND TIME (dominant)
       const inTime =
         y >= startY &&
-        y < startY + timePattern.length &&
+        y < startY + pattern.length &&
         x >= startX &&
-        x < startX + timePattern[0].length;
+        x < startX + pattern[0].length;
 
+      // 🔤 TIME TEXT
       if (inTime) {
-        const t = timePattern[y - startY][x - startX];
-        if (t !== " ") char = t;
+        const char = pattern[y - startY][x - startX];
+        if (char !== " ") {
+          ctx.fillStyle = "#000";
+          ctx.font = `${cellSize * 2.2}px monospace`;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "middle";
+
+          ctx.fillText(
+            char,
+            x * cellSize + cellSize / 2,
+            y * cellSize + cellSize / 2
+          );
+        }
       }
 
-      // 🌫️ BACKGROUND FIELD (subtle)
+      // ⚪ VIDEO CIRCLES
       else if (brightness < brightnessThreshold) {
 
-        if (motion > motionThreshold || !grid[i]) {
-          grid[i] = Math.random() > 0.7 ? "." : "";
+        if (motion > motionThreshold || grid[i] === false) {
+          grid[i] = Math.random() > 0.7;
         }
 
-        char = grid[i];
-      }
+        if (grid[i]) {
+          const cx = x * cellSize + cellSize / 2;
+          const cy = y * cellSize + cellSize / 2;
 
-      if (char) {
-        ctx.fillStyle = inTime ? "#000" : "#999";
-        ctx.font = inTime
-          ? `${cellSize * 2.2}px monospace`
-          : `${cellSize}px monospace`;
 
-        ctx.fillText(
-          char,
-          x * cellSize + cellSize / 2,
-          y * cellSize + cellSize / 2
-        );
+const intensity = smoothPollution / 5;
+
+const r = 200 - intensity * 40;
+const g = 230 - intensity * 20;
+const b = 200 - intensity * 60;
+
+ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+
+
+          ctx.beginPath();
+          ctx.arc(cx, cy, cellSize * 0.4, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
     }
   }
+
+  // 🧾 UI TEXT (top-left)
+  ctx.fillStyle = "#000";
+  ctx.font = "14px monospace";
+  ctx.textAlign = "left";
+
+  ctx.fillText(`RAIN: ${smoothRain.toFixed(1)} mm`, 20, 30);
+  ctx.fillText(`AIR: ${(smoothPollution * 20).toFixed(0)}%`, 20, 50);
 
   previousGray = gray;
 }
 
 draw();
+
+// 📱 RESIZE
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
 </script>
 
 </body>
