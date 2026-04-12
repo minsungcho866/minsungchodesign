@@ -22,23 +22,35 @@ body {
   padding: 0 20px;
 }
 
-/* Title */
+/* Main Title */
 h1 {
   font-size: 20px;
   font-weight: 300;
-  margin-bottom: 60px;
+  margin-bottom: 40px;
+}
+
+/* Category Titles */
+h2 {
+  font-size: 14px;
+  font-weight: 400;
+  color: #777;
+  margin-top: 50px;
+  margin-bottom: 15px;
+  letter-spacing: 0.05em;
 }
 
 /* List */
 .project-list {
   display: flex;
   flex-direction: column;
-  gap: 25px;
+  gap: 20px;
+  position: relative;
+  z-index: 1;
 }
 
 /* Items */
 .project-item {
-  font-size: 28px;
+  font-size: 26px;
   color: #aaa;
   text-decoration: none;
   transition: 0.3s;
@@ -59,7 +71,6 @@ h1 {
   transform: scale(0.95);
   transition: opacity 0.2s ease, transform 0.2s ease;
   z-index: 100;
-  will-change: transform;
   filter: grayscale(100%);
 }
 
@@ -137,17 +148,40 @@ h1 {
 <div class="container">
   <h1>Projects</h1>
 
+  <!-- Website -->
+  <h2>Website Design</h2>
   <div class="project-list">
     <a href="https://chom866.interactive.rodeo/studio/projects/P2/mainpage/index.html" class="project-item" data-img="../imgs/background01.webp">Wallet Saver Map</a>
-    <a href="project2/index.html" class="project-item" data-img="../imgs/background02.webp">Home</a>
-    <a href="project3.html" class="project-item" data-img="../imgs/background03.webp">12 Rules of Life</a>
-    <a href="project4.html" class="project-item" data-img="../imgs/background04.webp">History of Video Games</a>
     <a href="https://chom866.interactive.rodeo/studio/projects/P3/mainpage.html" class="project-item" data-img="../imgs/background05.webp">Cole + Ice</a>
-    <a href="project6.html" class="project-item" data-img="../imgs/background06.webp">Solar System</a>
-    <a href="project7.html" class="project-item" data-img="../imgs/background07.webp">Typeface Archive</a>
-    <a href="project8.html" class="project-item" data-img="../imgs/background08.webp">Curvo 2</a>
     <a href="project9/index.html" class="project-item" data-img="../imgs/photo7.webp">TIME CONSTRUCTS THE PRESENT</a>  
   </div>
+
+  <!-- Book -->
+  <h2>Book Design</h2>
+  <div class="project-list">
+    <a href="project2/index.html" class="project-item" data-img="../imgs/background02.webp">Home</a>
+    <a href="project4.html" class="project-item" data-img="../imgs/background04.webp">History of Video Games</a>
+  </div>
+
+  <!-- Poster -->
+  <h2>Poster Design</h2>
+  <div class="project-list">
+    <a href="project3.html" class="project-item" data-img="../imgs/background03.webp">12 Rules of Life</a>
+    <a href="project6.html" class="project-item" data-img="../imgs/background06.webp">Solar System</a>
+  </div>
+
+  <!-- Typeface -->
+  <h2>Typeface Design</h2>
+  <div class="project-list">
+    <a href="project8.html" class="project-item" data-img="../imgs/photo9.webp">Curvo 2</a>
+  </div>
+
+  <!-- Individual -->
+  <h2>Individual Project</h2>
+  <div class="project-list">
+    <a href="https://instagram.com/typeface.archive" class="project-item" data-img="../imgs/photo8.webp">Typeface Archive</a>
+  </div>
+
 </div>
 
 <!-- Hover Image -->
@@ -172,7 +206,10 @@ const imgTag = hoverImage.querySelector("img");
 document.querySelectorAll(".project-item").forEach(item => {
 
   item.addEventListener("mouseenter", () => {
-    imgTag.src = item.dataset.img;
+    const imgSrc = item.dataset.img;
+    if (!imgSrc) return;
+
+    imgTag.src = imgSrc;
     hoverImage.style.opacity = 1;
     hoverImage.style.transform = "scale(1)";
   });
@@ -194,12 +231,10 @@ document.querySelectorAll(".project-item").forEach(item => {
     let x = e.clientX + offset;
     let y = e.clientY + offset;
 
-    // Flip horizontally if overflow right
     if (x + imgWidth > viewportWidth) {
       x = e.clientX - imgWidth - offset;
     }
 
-    // Flip vertically if overflow bottom
     if (y + imgHeight > viewportHeight) {
       y = e.clientY - imgHeight - offset;
     }
@@ -210,7 +245,7 @@ document.querySelectorAll(".project-item").forEach(item => {
 
 });
 
-/* Extra safety */
+/* Safety */
 document.addEventListener("mousemove", (e) => {
   const el = document.elementFromPoint(e.clientX, e.clientY);
   if (!el || !el.classList.contains("project-item")) {
