@@ -26,7 +26,6 @@
   width: 100%;
   height: 3px;
   background-color: #e3e3e3;
-  border-radius: 0px;
   transition: 0.5s;
 }
 .hamburger.active div:nth-child(1) {
@@ -47,7 +46,6 @@
   gap: 15px;
   background: rgba(0,0,0);
   padding: 15px;
-  border-radius: 0px;
   opacity: 0;
   pointer-events: none;
   transition: 0.3s;
@@ -62,7 +60,6 @@
   background: transparent;
   color: white;
   border: none;
-  padding: 10px 20px;
   cursor: pointer;
 }
 .menu button:hover {
@@ -90,62 +87,70 @@
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.161.0/build/three.module.js";
 
+/* Detect mobile */
+const isMobile = window.innerWidth < 768;
+
 /* Scene */
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, innerWidth/innerHeight, 0.1, 1000);
-camera.position.set(0,-0.25,0);
 
-const renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+const camera = new THREE.PerspectiveCamera(
+  75,
+  innerWidth / innerHeight,
+  0.1,
+  1000
+);
+camera.position.set(0, -0.25, 0);
+
+const renderer = new THREE.WebGLRenderer({
+  antialias: !isMobile,
+  alpha: true
+});
 renderer.setSize(innerWidth, innerHeight);
-renderer.setClearColor(0x000000,0);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
+renderer.setClearColor(0x000000, 0);
 document.body.appendChild(renderer.domElement);
 
 /* Lights */
-scene.add(new THREE.AmbientLight(0xffffff,0.8));
-const dir = new THREE.DirectionalLight(0xffffff,0.5);
+scene.add(new THREE.AmbientLight(0xffffff, 0.8));
+const dir = new THREE.DirectionalLight(0xffffff, 0.5);
 dir.position.set(5,5,5);
 scene.add(dir);
 
-/* Main group */
+/* Group */
 const group = new THREE.Group();
 scene.add(group);
 
-/* Store rows */
 const rows = [];
 
 /* Images */
 const images = [
-  "imgs/photo1.webp",
-  "imgs/photo2.webp",
-  "imgs/photo3.webp",
-  "imgs/photo4.webp",
-  "imgs/photo5.webp",
-  "imgs/photo6.webp",
-  "imgs/photo7.webp",
-  "imgs/photo8.webp"
+  "imgs/photo1.webp","imgs/photo2.webp","imgs/photo3.webp",
+  "imgs/photo4.webp","imgs/photo5.webp","imgs/photo6.webp",
+  "imgs/photo7.webp","imgs/photo8.webp"
 ];
 
 const urls = [
-  "projects/project1.html",
-  "projects/project2.html",
-  "projects/project3.html",
-  "projects/project4.html",
-  "projects/project5.html",
-  "projects/project6.html"
+  "projects/project1.html","projects/project2.html",
+  "projects/project3.html","projects/project4.html",
+  "projects/project5.html","projects/project6.html"
 ];
 
 const loader = new THREE.TextureLoader();
 
-/* Globe settings */
+/* Globe settings (optimized) */
 const radius = 2;
-const latSegments = 10;
-const lonSegments = 20;
-const baseWidth = 0.45; // width
-const baseHeight = baseWidth * 9/16; // 16:9 ratio
+const latSegments = isMobile ? 6 : 10;
+const lonSegments = isMobile ? 12 : 20;
+
+const baseWidth = 0.45;
+const baseHeight = baseWidth * 9/16;
 
 let imgIndex = 0;
 
-/* Create globe rows */
+/* Store all objects once (for raycasting) */
+const objects = [];
+
+/* Create globe */
 for(let lat=1; lat<latSegments; lat++){
   const rowGroup = new THREE.Group();
   group.add(rowGroup);
@@ -160,40 +165,29 @@ for(let lat=1; lat<latSegments; lat++){
     const y = radius*Math.cos(theta);
     const z = radius*Math.sin(theta)*Math.sin(phi);
 
+    const material = new THREE.MeshStandardMaterial({
+      side: THREE.DoubleSide,
+      color: 0xaaaaaa
+    });
+
     const plane = new THREE.Mesh(
       new THREE.PlaneGeometry(baseWidth, baseHeight),
-      new THREE.MeshStandardMaterial({side:THREE.DoubleSide})
+      material
     );
 
     plane.position.set(x,y,z);
     plane.lookAt(0,0,0);
-    // plane.rotateZ(Math.PI); <-- removed this line to prevent vertical flip
 
     rowGroup.add(plane);
+    objects.push(plane);
 
     const path = images[imgIndex % images.length];
     imgIndex++;
 
     loader.load(path, tex=>{
-      tex.flipY = false; // no reflection
-
-      // Monochrome conversion
-      const img = tex.image;
-      const canvas = document.createElement('canvas');
-      canvas.width = img.width;
-      canvas.height = img.height;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0);
-      const imgData = ctx.getImageData(0,0,canvas.width,canvas.height);
-      const data = imgData.data;
-      for(let i=0;i<data.length;i+=4){
-        const gray = 0.299*data[i]+0.587*data[i+1]+0.114*data[i+2];
-        data[i]=data[i+1]=data[i+2]=gray;
-      }
-      ctx.putImageData(imgData,0,0);
-
-      plane.material.map = new THREE.CanvasTexture(canvas);
-      plane.material.needsUpdate = true;
+      tex.flipY = true;
+      material.map = tex;
+      material.needsUpdate = true;
     });
   }
 }
@@ -214,43 +208,48 @@ renderer.domElement.addEventListener("mousemove",e=>{
   lastX=e.clientX; lastY=e.clientY;
 });
 
-/* Hover + Click */
+/* Raycaster (optimized) */
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 let hovered=null;
+let lastMoveTime = 0;
 
 renderer.domElement.addEventListener("mousemove",e=>{
+  const now = performance.now();
+  if(now - lastMoveTime < 50) return;
+  lastMoveTime = now;
+
   mouse.x = (e.clientX/innerWidth)*2-1;
   mouse.y = -(e.clientY/innerHeight)*2+1;
-  raycaster.setFromCamera(mouse,camera);
 
-  const objects = rows.flatMap(r=>r.children);
+  raycaster.setFromCamera(mouse,camera);
   const hits = raycaster.intersectObjects(objects);
 
   if(hits.length){
     const p = hits[0].object;
-    if(hovered!==p){
+
+    if(hovered !== p){
       if(hovered){
         hovered.scale.set(1,1,1);
-        hovered.material.color.set(0xffffff);
+        hovered.material.color.set(0xaaaaaa);
       }
-      hovered=p;
+      hovered = p;
       p.scale.set(1.05,1.05,1.05);
-      p.material.color.set(0xdddddd);
+      p.material.color.set(0xffffff);
     }
   } else if(hovered){
     hovered.scale.set(1,1,1);
-    hovered.material.color.set(0xffffff);
-    hovered=null;
+    hovered.material.color.set(0xaaaaaa);
+    hovered = null;
   }
 });
 
+/* Click */
 renderer.domElement.addEventListener("click",e=>{
   mouse.x = (e.clientX/innerWidth)*2-1;
   mouse.y = -(e.clientY/innerHeight)*2+1;
-  raycaster.setFromCamera(mouse,camera);
 
-  const objects = rows.flatMap(r=>r.children);
+  raycaster.setFromCamera(mouse,camera);
   const hits = raycaster.intersectObjects(objects);
 
   if(hits.length){
@@ -259,7 +258,7 @@ renderer.domElement.addEventListener("click",e=>{
   }
 });
 
-/* Alternating rotation */
+/* Animation */
 function animate(){
   requestAnimationFrame(animate);
 
@@ -280,6 +279,9 @@ window.addEventListener("resize",()=>{
 });
 
 /* Menu */
+const hamburger = document.getElementById("hamburger");
+const menu = document.getElementById("menu");
+
 hamburger.onclick = ()=>{
   hamburger.classList.toggle("active");
   menu.classList.toggle("show");
