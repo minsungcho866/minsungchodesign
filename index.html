@@ -87,9 +87,6 @@
 <script type="module">
 import * as THREE from "https://unpkg.com/three@0.161.0/build/three.module.js";
 
-/* Detect mobile */
-const isMobile = window.innerWidth < 768;
-
 /* Scene */
 const scene = new THREE.Scene();
 
@@ -99,10 +96,10 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, -0.25, 0);
+camera.position.z = 5;
 
 const renderer = new THREE.WebGLRenderer({
-  antialias: !isMobile,
+  antialias: true,
   alpha: true
 });
 renderer.setSize(innerWidth, innerHeight);
@@ -111,16 +108,11 @@ renderer.setClearColor(0x000000, 0);
 document.body.appendChild(renderer.domElement);
 
 /* Lights */
-scene.add(new THREE.AmbientLight(0xffffff, 0.8));
-const dir = new THREE.DirectionalLight(0xffffff, 0.5);
-dir.position.set(5,5,5);
-scene.add(dir);
+scene.add(new THREE.AmbientLight(0xffffff, 1));
 
 /* Group */
 const group = new THREE.Group();
 scene.add(group);
-
-const rows = [];
 
 /* Images */
 const images = [
@@ -134,92 +126,66 @@ const urls = [
 
 const loader = new THREE.TextureLoader();
 
-/* Globe settings (optimized) */
-const radius = 2;
-const latSegments = isMobile ? 6 : 10;
-const lonSegments = isMobile ? 12 : 20;
+/* Ring settings */
+const radius = 3;
+const count = images.length;
 
-const baseWidth = 0.45;
+/* 2x bigger */
+const baseWidth = 0.7;
 const baseHeight = baseWidth * 9/16;
 
-let imgIndex = 0;
-
-/* Store all objects once (for raycasting) */
 const objects = [];
 
-/* Create globe */
-for(let lat=1; lat<latSegments; lat++){
-  const rowGroup = new THREE.Group();
-  group.add(rowGroup);
-  rows.push(rowGroup);
+/* Create circular ring */
+for(let i = 0; i < count; i++){
 
-  const theta = lat * Math.PI / latSegments;
+  const angle = (i / count) * Math.PI * 2;
 
-  for(let lon=0; lon<lonSegments; lon++){
-    const phi = lon * 2 * Math.PI / lonSegments;
+  const x = Math.cos(angle) * radius;
+  const z = Math.sin(angle) * radius;
 
-    const x = radius*Math.sin(theta)*Math.cos(phi);
-    const y = radius*Math.cos(theta);
-    const z = radius*Math.sin(theta)*Math.sin(phi);
+  const material = new THREE.MeshBasicMaterial({
+    side: THREE.DoubleSide,
+    color: 0xaaaaaa
+  });
 
-    const material = new THREE.MeshStandardMaterial({
-      side: THREE.DoubleSide,
-      color: 0xaaaaaa
-    });
+  const plane = new THREE.Mesh(
+    new THREE.PlaneGeometry(baseWidth, baseHeight),
+    material
+  );
 
-    const plane = new THREE.Mesh(
-      new THREE.PlaneGeometry(baseWidth, baseHeight),
-      material
-    );
+  plane.position.set(x, 0, z);
 
-    plane.position.set(x,y,z);
-    plane.lookAt(0,0,0);
+  /* Face center */
+  plane.lookAt(0, 0, 0);
 
-    rowGroup.add(plane);
-    objects.push(plane);
+  group.add(plane);
+  objects.push(plane);
 
-    const path = images[imgIndex % images.length];
-    imgIndex++;
+  loader.load(images[i], tex=>{
+    tex.flipY = true;
 
-    loader.load(path, tex=>{
-      tex.flipY = true;
-      material.map = tex;
-      material.needsUpdate = true;
-    });
-  }
+      // 👇 ADD THIS
+  tex.wrapS = THREE.RepeatWrapping;
+  tex.repeat.x = -1;
+  
+    material.map = tex;
+    material.needsUpdate = true;
+
+    
+  });
 }
 
-/* Drag */
-let dragging=false, lastX=0,lastY=0;
-
-renderer.domElement.addEventListener("mousedown",e=>{
-  dragging=true; lastX=e.clientX; lastY=e.clientY;
-});
-renderer.domElement.addEventListener("mouseup",()=>dragging=false);
-renderer.domElement.addEventListener("mouseleave",()=>dragging=false);
-
-renderer.domElement.addEventListener("mousemove",e=>{
-  if(!dragging) return;
-  camera.rotation.y -= (e.clientX-lastX)*0.002;
-  camera.rotation.x -= (e.clientY-lastY)*0.002;
-  lastX=e.clientX; lastY=e.clientY;
-});
-
-/* Raycaster (optimized) */
+/* Raycaster */
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
-let hovered=null;
-let lastMoveTime = 0;
+let hovered = null;
 
-renderer.domElement.addEventListener("mousemove",e=>{
-  const now = performance.now();
-  if(now - lastMoveTime < 50) return;
-  lastMoveTime = now;
-
+renderer.domElement.addEventListener("mousemove", e=>{
   mouse.x = (e.clientX/innerWidth)*2-1;
   mouse.y = -(e.clientY/innerHeight)*2+1;
 
-  raycaster.setFromCamera(mouse,camera);
+  raycaster.setFromCamera(mouse, camera);
   const hits = raycaster.intersectObjects(objects);
 
   if(hits.length){
@@ -231,7 +197,7 @@ renderer.domElement.addEventListener("mousemove",e=>{
         hovered.material.color.set(0xaaaaaa);
       }
       hovered = p;
-      p.scale.set(1.05,1.05,1.05);
+      p.scale.set(1.1,1.1,1.1);
       p.material.color.set(0xffffff);
     }
   } else if(hovered){
@@ -242,37 +208,34 @@ renderer.domElement.addEventListener("mousemove",e=>{
 });
 
 /* Click */
-renderer.domElement.addEventListener("click",e=>{
+renderer.domElement.addEventListener("click", e=>{
   mouse.x = (e.clientX/innerWidth)*2-1;
   mouse.y = -(e.clientY/innerHeight)*2+1;
 
-  raycaster.setFromCamera(mouse,camera);
+  raycaster.setFromCamera(mouse, camera);
   const hits = raycaster.intersectObjects(objects);
 
   if(hits.length){
     const index = objects.indexOf(hits[0].object);
-    window.open(urls[index % urls.length],"_blank");
+    window.open(urls[index % urls.length], "_blank");
   }
 });
 
-/* Animation */
+/* Animate (single rotation) */
 function animate(){
   requestAnimationFrame(animate);
 
-  rows.forEach((row,i)=>{
-    const dir = i % 2 === 0 ? 1 : -1;
-    row.rotation.y += 0.001 * dir;
-  });
+  group.rotation.y += 0.003;
 
-  renderer.render(scene,camera);
+  renderer.render(scene, camera);
 }
 animate();
 
 /* Resize */
-window.addEventListener("resize",()=>{
+window.addEventListener("resize", ()=>{
   camera.aspect = innerWidth/innerHeight;
   camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth,innerHeight);
+  renderer.setSize(innerWidth, innerHeight);
 });
 
 /* Menu */
