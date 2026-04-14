@@ -26,6 +26,31 @@ h1{
   z-index:5;
 }
 
+/* INTRO (added) */
+#intro{
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#e9e9e9;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:9999;
+}
+
+#intro-text{
+  font-size:18px;
+  font-weight:900;
+  letter-spacing:-2px;
+  display:flex;
+}
+
+.letter{
+  display:inline-block;
+}
+
 /* HAMBURGER */
 .hamburger{
   position:absolute;
@@ -88,6 +113,11 @@ canvas{
 </head>
 
 <body>
+
+<!-- INTRO (added) -->
+<div id="intro">
+  <div id="intro-text"></div>
+</div>
 
 <h1>MINSUNG</h1>
 
@@ -291,6 +321,63 @@ document.addEventListener("click", (e)=>{
     hamburger.classList.remove("active");
   }
 });
+
+/* INTRO SCRIPT (added only) */
+const intro = document.getElementById("intro");
+const introText = document.getElementById("intro-text");
+
+const finalText = "MINSUNG";
+const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+let letters = [];
+let frame = 0;
+let revealSpeed = 10;
+
+finalText.split("").forEach(()=>{
+  const span = document.createElement("span");
+  span.className = "letter";
+  introText.appendChild(span);
+  letters.push(span);
+});
+
+function animateIntro(){
+
+  letters.forEach((el,i)=>{
+
+    if(i < frame / revealSpeed){
+      el.innerText = finalText[i];
+      el.style.transform = "translateY(0px) scaleY(1)";
+    } else {
+      el.innerText = chars[Math.floor(Math.random()*chars.length)];
+
+      const x = (Math.random()-0.5)*10;
+      const y = (Math.random()-0.5)*20;
+
+      el.style.transform = `translate(${x}px, ${y}px) scaleY(${1 + Math.random()*0.4})`;
+    }
+
+  });
+
+  frame++;
+
+  if(frame < finalText.length * revealSpeed + 15){
+    requestAnimationFrame(animateIntro);
+  } else {
+
+    setTimeout(()=>{
+      intro.style.transition = "opacity 0.8s ease";
+      intro.style.opacity = "0";
+
+      setTimeout(()=>{
+        intro.remove();
+      },800);
+
+    },400);
+  }
+}
+
+animateIntro();
+
 </script>
 
 </body>
