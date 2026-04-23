@@ -35,16 +35,20 @@ h1 {
   font-size: 28px;
   line-height: 1.6;
   color: #aaa;
-  max-width: 700px;
+  max-width: 720px;
 
   white-space: pre-line;
   text-align: center;
   margin: 0 auto;
-
-  word-break: keep-all;
-  overflow-wrap: break-word;
 }
 
+/* Add real spacing between lines */
+.about-text br {
+  display: block;
+  margin-bottom: 12px;
+}
+
+/* Character animation */
 .about-text span {
   display: inline-block;
   transition: transform 0.15s ease, color 0.2s ease;
@@ -113,8 +117,10 @@ h1 {
 
   .about-text {
     font-size: 18px;
-    line-height: 1.5;
-    max-width: 100%;
+    line-height: 1.6;
+    max-width: 320px;
+
+    text-align: left; /* 🔥 key fix */
   }
 
   .hamburger {
@@ -149,19 +155,20 @@ h1 {
   <h1>About</h1>
 
   <div class="about-text" id="aboutText">
-Minsung Cho
-Graphic Designer
+Designer
 
 Based in
 NYC / Seoul
 
-Education
-Parsons School of Design — Communication Design
 
-Experience
+Education
+Parsons School of Design — BFA Communication Design
+
+
 Designer @ Angel Music
 
-Background
+
+Served in
 ROK Army — driver / interpreter (U.S. joint operations)
   </div>
 </div>
@@ -188,7 +195,6 @@ text.innerHTML = letters.map(letter => {
 
 const spans = text.querySelectorAll("span");
 
-/* Detect mobile */
 const isMobile = window.innerWidth < 600;
 
 function handleMove(x, y) {
@@ -207,9 +213,8 @@ function handleMove(x, y) {
     if (dist < maxDist) {
       const force = (maxDist - dist) / maxDist;
 
-      span.style.transform = `
-        translate(${dx * 0.03 * force}px, ${dy * 0.03 * force}px)
-      `;
+      span.style.transform =
+        `translate(${dx * 0.03 * force}px, ${dy * 0.03 * force}px)`;
       span.style.color = "#fff";
     } else {
       span.style.transform = "translate(0,0)";
@@ -219,12 +224,10 @@ function handleMove(x, y) {
   });
 }
 
-/* Mouse */
 document.addEventListener("mousemove", (e) => {
   handleMove(e.clientX, e.clientY);
 });
 
-/* Touch */
 document.addEventListener("touchmove", (e) => {
   const touch = e.touches[0];
   handleMove(touch.clientX, touch.clientY);
