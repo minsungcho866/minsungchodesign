@@ -27,20 +27,23 @@ h1 {
   font-size: 20px;
   font-weight: 300;
   margin-bottom: 60px;
+  text-align: center;        /* ← center text */
+
 }
 
-/* Proximity text */
 .about-text {
   font-size: 28px;
   line-height: 1.6;
   color: #aaa;
   max-width: 700px;
 
-  text-align: justify;
-  text-align-last: left;
+  white-space: pre-line;
 
-  word-break: keep-all;       /* prevents weird breaks */
-  overflow-wrap: break-word;  /* avoids overflow */
+  text-align: center;        /* ← center text */
+  margin: 0 auto;            /* ← center the block itself */
+
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 .about-text span {
@@ -118,23 +121,19 @@ h1 {
   <h1>About</h1>
 
   <div class="about-text" id="aboutText">
-    Minsung Cho is a graphic designer 
-    currently studying at Parsons School of Design, 
-    with a focus on clarity, 
-    simplicity, and communication. His work translates 
-    complex ideas into accessible visual systems 
-    across digital and print. Through independent and 
-    collaborative projects, 
-    he develops structured and thoughtful solutions that 
-    prioritize understanding and engagement. 
-    He has served in the Republic of Korea Army 
-    as a driver and interpreter 
-    during joint operations with U.S. forces, 
-    strengthening his ability to communicate 
-    across contexts with precision. 
-    His practice continues to evolve 
-    through experimentation 
-    and disciplined thinking.
+Minsung Cho
+Graphic Designer
+
+Based on
+NYC / Seoul
+
+Education
+Parsons School of Design Communication Design
+
+Designer @ angel Music
+
+Experience
+ROK Army — driver / interpreter
   </div>
 </div>
 
@@ -153,7 +152,8 @@ const text = document.getElementById("aboutText");
 const letters = text.innerText.split("");
 
 text.innerHTML = letters.map(letter => {
-  if(letter === " ") return " ";
+  if (letter === "\n") return "<br>"; // preserve line breaks
+  if (letter === " ") return " ";
   return `<span>${letter}</span>`;
 }).join("");
 
