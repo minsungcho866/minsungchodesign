@@ -27,10 +27,10 @@ h1 {
   font-size: 20px;
   font-weight: 300;
   margin-bottom: 60px;
-  text-align: center;        /* ← center text */
-
+  text-align: center;
 }
 
+/* About Text */
 .about-text {
   font-size: 28px;
   line-height: 1.6;
@@ -38,9 +38,8 @@ h1 {
   max-width: 700px;
 
   white-space: pre-line;
-
-  text-align: center;        /* ← center text */
-  margin: 0 auto;            /* ← center the block itself */
+  text-align: center;
+  margin: 0 auto;
 
   word-break: keep-all;
   overflow-wrap: break-word;
@@ -99,6 +98,35 @@ h1 {
 .menu a:hover {
   text-decoration: underline;
 }
+
+/* -------- MOBILE -------- */
+@media (max-width: 600px) {
+
+  .container {
+    margin: 80px auto;
+  }
+
+  h1 {
+    font-size: 16px;
+    margin-bottom: 40px;
+  }
+
+  .about-text {
+    font-size: 18px;
+    line-height: 1.5;
+    max-width: 100%;
+  }
+
+  .hamburger {
+    width: 28px;
+    height: 22px;
+  }
+
+  .menu {
+    top: 60px;
+    right: 15px;
+  }
+}
 </style>
 </head>
 
@@ -124,16 +152,17 @@ h1 {
 Minsung Cho
 Graphic Designer
 
-Based on
+Based in
 NYC / Seoul
 
 Education
-Parsons School of Design Communication Design
-
-Designer @ angel Music
+Parsons School of Design — Communication Design
 
 Experience
-ROK Army — driver / interpreter
+Designer @ Angel Music
+
+Background
+ROK Army — driver / interpreter (U.S. joint operations)
   </div>
 </div>
 
@@ -152,31 +181,34 @@ const text = document.getElementById("aboutText");
 const letters = text.innerText.split("");
 
 text.innerHTML = letters.map(letter => {
-  if (letter === "\n") return "<br>"; // preserve line breaks
+  if (letter === "\n") return "<br>";
   if (letter === " ") return " ";
   return `<span>${letter}</span>`;
 }).join("");
 
 const spans = text.querySelectorAll("span");
 
-document.addEventListener("mousemove", (e) => {
+/* Detect mobile */
+const isMobile = window.innerWidth < 600;
+
+function handleMove(x, y) {
   spans.forEach(span => {
 
     const rect = span.getBoundingClientRect();
     const cx = rect.left + rect.width / 2;
     const cy = rect.top + rect.height / 2;
 
-    const dx = e.clientX - cx;
-    const dy = e.clientY - cy;
+    const dx = x - cx;
+    const dy = y - cy;
 
     const dist = Math.sqrt(dx * dx + dy * dy);
-    const maxDist = 120;
+    const maxDist = isMobile ? 80 : 120;
 
     if (dist < maxDist) {
       const force = (maxDist - dist) / maxDist;
 
       span.style.transform = `
-        translate(${dx * 0.05 * force}px, ${dy * 0.05 * force}px)
+        translate(${dx * 0.03 * force}px, ${dy * 0.03 * force}px)
       `;
       span.style.color = "#fff";
     } else {
@@ -185,6 +217,17 @@ document.addEventListener("mousemove", (e) => {
     }
 
   });
+}
+
+/* Mouse */
+document.addEventListener("mousemove", (e) => {
+  handleMove(e.clientX, e.clientY);
+});
+
+/* Touch */
+document.addEventListener("touchmove", (e) => {
+  const touch = e.touches[0];
+  handleMove(touch.clientX, touch.clientY);
 });
 </script>
 
