@@ -1,42 +1,580 @@
+# Experimental Scroll Portfolio — Full Single-File Prototype (HTML/CSS/JS)
+
+This keeps your rotating 3D homepage, removes the hamburger, makes **About / Contact** sticky while scrolling, adds a **bouncing OCR-A + Helvetica kinetic field**, and a **three-column counter-scrolling archive strip** before a project column.
+
+Save as `index.html` and replace image paths as needed.
+
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="assets/style.css">
-<link rel="preload" as="image" href="imgs/background01.png">
-<link rel="preload" as="image" href="imgs/background02.png">
-<link rel="preload" as="image" href="imgs/background03.png">
-<link rel="preload" as="image" href="imgs/background04.png">
-<link rel="preload" as="image" href="imgs/background05.png">
-<link rel="preload" as="image" href="imgs/background06.png">
-<meta name="description" content="Portfolio of Minsung Cho, a graphic designer specializing in branding, visual identity, and digital design.">
-<meta property="og:title" content="Minsung Cho — Graphic Designer">
-<meta property="og:description" content="Portfolio of branding, logo design, and visual identity work.">
-<meta property="og:image" content="https://minsungchodesign.com/preview.jpg">
-<meta property="og:url" content="https://minsungchodesign.com">
-<meta property="og:type" content="website">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1.0" />
+<title>Minsung Cho</title>
+<link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
 
-<link rel="icon" type="image/x-icon" href="favicon/favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="favicon/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="favicon/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="favicon/apple-touch-icon.png">
-<link rel="manifest" href="favicon/site.webmanifest">
-<meta name="theme-color" content="#1e2420">
+<style>
+:root{
+ --bg:#e9e9e9;
+ --black:#000;
+ --border:#8d8d8d;
+}
 
-    <title>MINSUNG CHO</title>
+*{
+ box-sizing:border-box;
+ margin:0;
+ padding:0;
+}
+
+html,body{
+ background:var(--bg);
+ overflow-x:hidden;
+ font-family:Arial, Helvetica, sans-serif;
+}
+
+body{
+ color:#000;
+}
+
+canvas{
+ position:absolute;
+ inset:0;
+ z-index:1;
+}
+
+section{
+ position:relative;
+ width:100%;
+}
+
+/* ---------------- HERO ---------------- */
+#hero{
+ height:100vh;
+ overflow:hidden;
+}
+
+.hero-title{
+ position:absolute;
+ top:10px;
+ left:18px;
+ z-index:5;
+ font-size:12vw;
+ line-height:.88;
+ font-weight:900;
+ letter-spacing:-.04em;
+}
+
+.sticky-nav{
+ position:fixed;
+ left:50%;
+ transform:translateX(-50%);
+ bottom:26px;
+ z-index:50;
+ display:flex;
+ gap:8px;
+ mix-blend-mode:multiply;
+}
+
+.sticky-nav a{
+ text-decoration:none;
+ color:#000;
+ border:1px solid #000;
+ padding:4px 8px;
+ font-size:13px;
+ line-height:1;
+ background:rgba(233,233,233,.85);
+ backdrop-filter:blur(3px);
+}
+
+/* ---------------- BOUNCING TYPO FIELD ---------------- */
+#kinetic-type{
+ min-height:100vh;
+ padding:10vh 0;
+ border-top:1px solid #cfcfcf;
+ display:flex;
+ justify-content:center;
+ align-items:center;
+}
+
+#playfield{
+ width:min(92vw,1200px);
+ height:72vh;
+ border:1px solid #bbb;
+ position:relative;
+ overflow:hidden;
+ background:#f1f1f1;
+}
+
+.word-box{
+ position:absolute;
+ border:1px solid #666;
+ background:rgba(245,245,245,.92);
+ padding:8px 14px;
+ white-space:nowrap;
+ user-select:none;
+}
+
+.word-box.ocr{
+ font-family:monospace;
+ letter-spacing:.08em;
+}
+
+.word-box.helv{
+ font-family:Arial, Helvetica, sans-serif;
+ font-weight:700;
+}
+
+/* ---------------- TYPE ARCHIVE ---------------- */
+#archive{
+ min-height:220vh;
+ padding:8vw 0;
+}
+
+.archive-title{
+ font-size:7vw;
+ margin:0 4vw 4vw;
+ font-weight:300;
+}
+
+.archive-wrap{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:2vw;
+ height:180vh;
+ overflow:hidden;
+ padding:0 3vw;
+}
+
+.marquee-col{
+ overflow:hidden;
+ position:relative;
+ border-left:1px solid #d8d8d8;
+ border-right:1px solid #d8d8d8;
+}
+
+.track{
+ position:absolute;
+ width:100%;
+ display:flex;
+ flex-direction:column;
+ gap:2vw;
+ will-change:transform;
+}
+
+.archive-card{
+ width:100%;
+ background:#fff;
+ padding:.7vw;
+}
+
+.archive-card img{
+ width:100%;
+ display:block;
+}
+
+/* ---------------- PROJECTS ---------------- */
+#projects{
+ padding:12vw 5vw 18vw;
+ display:flex;
+ flex-direction:column;
+ gap:16vw;
+}
+
+.project{
+ display:flex;
+ flex-direction:column;
+ gap:2vw;
+}
+
+.project img{
+ width:100%;
+ display:block;
+}
+
+.project-title{
+ font-size:10vw;
+ font-weight:900;
+ line-height:.9;
+}
+
+.project-meta{
+ max-width:700px;
+ font-size:1rem;
+ line-height:1.5;
+}
+
+@media (max-width:900px){
+ .archive-wrap{
+  grid-template-columns:1fr;
+  height:auto;
+ }
+ .marquee-col{
+  height:70vh;
+ }
+}
+</style>
 </head>
 <body>
-    <h1>MINSUNG<br>CHO
-    </h1>
-    <p class="text"><a href="mailto:ryancho8765@gmail.com">
-    Ryancho8765@gmail.com
-    </p></a>
-<div class="navigation">
-    <a href="pages/about/index.html"><button class="button">ABOUT</button></a>
-    <a href="."><button class="button">PROJECTS</button></a>
-    <a href="pages/contact/index.html"><button class="btn">CONTACT</button></a>
-    </div>
-    
+
+<section id="hero">
+ <h1 class="hero-title">MINSUNG</h1>
+ <div class="sticky-nav">
+   <a href="#projects">Contact</a>
+   <a href="#archive">About</a>
+ </div>
+</section>
+
+<section id="kinetic-type">
+ <div id="playfield"></div>
+</section>
+
+<section id="archive">
+ <h2 class="archive-title">TYPEFACE ARCHIVE</h2>
+
+ <div class="archive-wrap">
+
+   <div class="marquee-col">
+      <div class="track down" id="track1"></div>
+   </div>
+
+   <div class="marquee-col">
+      <div class="track up" id="track2"></div>
+   </div>
+
+   <div class="marquee-col">
+      <div class="track down" id="track3"></div>
+   </div>
+
+ </div>
+</section>
+
+<section id="projects">
+
+<div class="project">
+<img src="imgs/project1.jpg">
+<div class="project-title">CURVO II</div>
+<div class="project-meta">Typeface system exploration and parametric character construction.</div>
+</div>
+
+<div class="project">
+<img src="imgs/project2.jpg">
+<div class="project-title">THIRD CULTURE</div>
+<div class="project-meta">Editorial system exploring identity, diaspora and narrative pacing.</div>
+</div>
+
+<div class="project">
+<img src="imgs/project3.jpg">
+<div class="project-title">WALLET SAVER</div>
+<div class="project-meta">Information mapping and public utility visualization.</div>
+</div>
+
+<div class="project">
+<img src="imgs/project4.jpg">
+<div class="project-title">COAL + ICE</div>
+<div class="project-meta">Identity and event graphics system.</div>
+</div>
+
+</section>
+
+<script type="module">
+import * as THREE from "https://unpkg.com/three@0.161.0/build/three.module.js";
+
+/* ================= HERO 3D ROTATION (kept) ================= */
+const scene = new THREE.Scene();
+
+const camera = new THREE.PerspectiveCamera(
+40,
+innerWidth/innerHeight,
+0.1,
+1000
+);
+
+camera.position.z=13;
+
+const renderer=new THREE.WebGLRenderer({
+ antialias:true,
+ alpha:true
+});
+renderer.setSize(innerWidth,innerHeight);
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
+document.getElementById('hero').appendChild(renderer.domElement);
+
+const group=new THREE.Group();
+group.position.y=-0.2;
+scene.add(group);
+
+const images=[
+"imgs/photo1.webp",
+"imgs/photo2.webp",
+"imgs/photo3.webp",
+"imgs/photo4.webp",
+"imgs/photo5.webp",
+"imgs/photo6.webp"
+];
+
+const urls=[
+"pages/projects/index.html"
+];
+
+const radius=5.5;
+const baseWidth=3.15;
+const baseHeight=baseWidth*.65;
+const objects=[];
+
+function createTexture(img){
+ const c=document.createElement('canvas');
+ c.width=512;
+ c.height=512;
+ const ctx=c.getContext('2d');
+ const r=12;
+
+ ctx.beginPath();
+ ctx.moveTo(r,0);
+ ctx.lineTo(512-r,0);
+ ctx.quadraticCurveTo(512,0,512,r);
+ ctx.lineTo(512,512-r);
+ ctx.quadraticCurveTo(512,512,512-r,512);
+ ctx.lineTo(r,512);
+ ctx.quadraticCurveTo(0,512,0,512-r);
+ ctx.lineTo(0,r);
+ ctx.quadraticCurveTo(0,0,r,0);
+ ctx.closePath();
+ ctx.clip();
+
+ ctx.translate(512,0);
+ ctx.scale(-1,1);
+ ctx.drawImage(img,0,0,512,512);
+
+ return new THREE.CanvasTexture(c);
+}
+
+images.forEach((src,i)=>{
+ const angle=(i/images.length)*Math.PI*2;
+ const x=Math.cos(angle)*radius;
+ const z=Math.sin(angle)*radius;
+
+ const mat=new THREE.MeshBasicMaterial({
+  color:0xffffff,
+  side:THREE.DoubleSide,
+  transparent:true,
+  depthWrite:false
+ });
+
+ const plane=new THREE.Mesh(
+   new THREE.PlaneGeometry(baseWidth,baseHeight),
+   mat
+ );
+
+ plane.position.set(x,0,z);
+ plane.lookAt(0,0,0);
+ group.add(plane);
+ objects.push(plane);
+
+ const img=new Image();
+ img.src=src;
+ img.onload=()=>{
+   mat.map=createTexture(img);
+   mat.needsUpdate=true;
+ }
+});
+
+const raycaster=new THREE.Raycaster();
+const mouse=new THREE.Vector2();
+let hovered=null;
+
+renderer.domElement.addEventListener('mousemove',e=>{
+ mouse.x=(e.clientX/innerWidth)*2-1;
+ mouse.y=-(e.clientY/innerHeight)*2+1;
+ raycaster.setFromCamera(mouse,camera);
+ const hits=raycaster.intersectObjects(objects);
+
+ if(hits.length){
+  const o=hits[0].object;
+  if(hovered!==o){
+    if(hovered) hovered.material.color.set(0xffffff);
+    hovered=o;
+    o.material.color.setRGB(1.25,1.25,1.25);
+  }
+ }
+ else if(hovered){
+   hovered.material.color.set(0xffffff);
+   hovered=null;
+ }
+});
+
+renderer.domElement.addEventListener('click',e=>{
+ mouse.x=(e.clientX/innerWidth)*2-1;
+ mouse.y=-(e.clientY/innerHeight)*2+1;
+ raycaster.setFromCamera(mouse,camera);
+ const hits=raycaster.intersectObjects(objects);
+ if(hits.length){
+  window.open(urls[0],'_blank');
+ }
+});
+
+function heroAnimate(){
+ requestAnimationFrame(heroAnimate);
+ group.rotation.y+=0.002;
+ renderer.render(scene,camera);
+}
+heroAnimate();
+
+/* ================= BOUNCING TYPO BOXES ================= */
+const field=document.getElementById('playfield');
+
+const labels=[
+['XXXXXXXXXXXXX','ocr'],
+['11111111111','ocr'],
+['ASDSAXZ','ocr'],
+['the Present','helv'],
+['CONSTRUCTS','helv'],
+['TIME','ocr'],
+['@@@@@@@','ocr'],
+['✕↟✹☛✕↟✹☛','ocr']
+];
+
+const boxes=[];
+
+labels.forEach(item=>{
+ const el=document.createElement('div');
+ el.className='word-box '+item[1];
+ el.textContent=item[0];
+ field.appendChild(el);
+
+ const w=120+Math.random()*80;
+ const h=48;
+
+ boxes.push({
+  el,
+  x:Math.random()*700,
+  y:Math.random()*300,
+  vx:(Math.random()*2+1)*(Math.random()>.5?1:-1),
+  vy:(Math.random()*2+1)*(Math.random()>.5?1:-1),
+  w,h
+ });
+});
+
+function collide(a,b){
+ return (
+ a.x < b.x+b.w &&
+ a.x+a.w > b.x &&
+ a.y < b.y+b.h &&
+ a.y+a.h > b.y
+ );
+}
+
+function animateBoxes(){
+ const fw=field.clientWidth;
+ const fh=field.clientHeight;
+
+ for(let b of boxes){
+  b.x+=b.vx;
+  b.y+=b.vy;
+
+  if(b.x<0 || b.x+b.w>fw) b.vx*=-1;
+  if(b.y<0 || b.y+b.h>fh) b.vy*=-1;
+ }
+
+ for(let i=0;i<boxes.length;i++){
+  for(let j=i+1;j<boxes.length;j++){
+   if(collide(boxes[i],boxes[j])){
+    boxes[i].vx*=-1;
+    boxes[i].vy*=-1;
+    boxes[j].vx*=-1;
+    boxes[j].vy*=-1;
+   }
+  }
+ }
+
+ boxes.forEach(b=>{
+  b.el.style.transform=`translate(${b.x}px,${b.y}px)`;
+ });
+
+ requestAnimationFrame(animateBoxes);
+}
+animateBoxes();
+
+/* ================= COUNTERSCROLL ARCHIVE ================= */
+const archiveImgs=[
+'imgs/archive1.jpg',
+'imgs/archive2.jpg',
+'imgs/archive3.jpg',
+'imgs/archive4.jpg',
+'imgs/archive5.jpg',
+'imgs/archive6.jpg'
+];
+
+function fillTrack(id){
+ const track=document.getElementById(id);
+ for(let loop=0;loop<3;loop++){
+   archiveImgs.forEach(src=>{
+      const card=document.createElement('div');
+      card.className='archive-card';
+      card.innerHTML=`<img src="${src}">`;
+      track.appendChild(card);
+   })
+ }
+}
+
+fillTrack('track1');
+fillTrack('track2');
+fillTrack('track3');
+
+let t=0;
+function archiveMove(){
+ requestAnimationFrame(archiveMove);
+ t+=0.45;
+
+ document.getElementById('track1').style.transform=`translateY(${(t%2200)-1100}px)`;
+ document.getElementById('track2').style.transform=`translateY(${-(t%2200)}px)`;
+ document.getElementById('track3').style.transform=`translateY(${(t%2200)-1100}px)`;
+}
+archiveMove();
+
+window.addEventListener('resize',()=>{
+ camera.aspect=innerWidth/innerHeight;
+ camera.updateProjectionMatrix();
+ renderer.setSize(innerWidth,innerHeight);
+});
+
+</script>
 </body>
 </html>
+```
+
+## Structure matches what you described
+
+### Section 1
+
+* Existing kinetic rotating homepage kept.
+* Hamburger removed.
+* About/Contact now persistent sticky anchors.
+
+### Section 2
+
+* OCR-A + Helvetica “screensaver collision field.”
+* Boxes bounce and change direction on collision.
+* Confined inside the rectangular field.
+
+### Section 3
+
+* Typeface archive with alternating vertical motion:
+
+  * Column 1 ↓
+  * Column 2 ↑
+  * Column 3 ↓
+
+### Section 4
+
+* Projects in vertical flex stack.
+
+## My suggestion for later iterations
+
+Next passes I’d recommend:
+
+1. make first hero dissolve into section 2 on scroll.
+2. use scroll velocity to affect archive speeds.
+3. replace random bounce with controlled typography choreography.
+4. add project reveals tied to scroll.
+
+Send the next effect when ready and we can build phase 2 from this.
