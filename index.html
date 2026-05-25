@@ -8,35 +8,48 @@
 <link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
 
 <style>
-body{
+
+*{
   margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
   background:#e9e9e9;
-  font-family: Arial, Helvetica, sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
   overflow:hidden;
 }
 
+/* TITLE */
+
 h1{
   position:absolute;
-  top:0;
-  left:20px;
-  font-size:12vw;
+  top:12px;
+  left:18px;
+
   margin:0;
+
+  font-size:11vw;
+  line-height:0.88;
   font-weight:900;
-  letter-spacing:-2px;
-  z-index:5;
+  letter-spacing:-0.08em;
+
+  z-index:10;
+  pointer-events:none;
 }
 
-/* INTRO (added) */
+/* INTRO */
+
 #intro{
   position:fixed;
-  top:0;
-  left:0;
-  width:100%;
-  height:100%;
+  inset:0;
   background:#e9e9e9;
+
   display:flex;
   justify-content:center;
   align-items:center;
+
   z-index:9999;
 }
 
@@ -51,63 +64,82 @@ h1{
   display:inline-block;
 }
 
-/* HAMBURGER */
-.hamburger{
-  position:absolute;
-  top:20px;
-  right:20px;
-  width:35px;
-  height:30px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-  cursor:pointer;
-  z-index:101;
-}
-.hamburger div{
-  height:3px;
-  background:black;
-  transition:.5s;
-}
-.hamburger.active div:nth-child(1){
-  transform:rotate(45deg) translate(7px,7px);
-}
-.hamburger.active div:nth-child(2){opacity:0;}
-.hamburger.active div:nth-child(3){
-  transform:rotate(-45deg) translate(8px,-8px);
-}
+/* TOP NAV */
 
-/* MENU */
-.menu{
-  position:absolute;
-  top:70px;
-  right:20px;
+.top-nav{
+  position:fixed;
+  top:28px;
+  right:32px;
+
   display:flex;
-  flex-direction:column;
-  gap:15px;
-  background:rgba(0,0,0,0.9);
-  padding:15px;
-  opacity:0;
-  pointer-events:none;
-  transition:0.3s;
-  font-size:12px;
+  gap:16px;
+
   z-index:100;
 }
-.menu.show{
-  opacity:1;
-  pointer-events:auto;
-}
-.menu a{
+.top-nav a{
+  background:black;
   color:white;
   text-decoration:none;
+
+  /* shorter height */
+  padding:9px 18px;
+
+  border-radius:999px;
+
+  /* typography */
+  font-family:
+    "Helvetica Neue",
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  font-size:18px;
+  font-weight:500; /* medium */
+
+  border:0.5px solid transparent;
+
+  transition:
+    color .25s ease,
+    border-color .25s ease;
 }
 
+.top-nav a:hover{
+  background:transparent;
+  color:black;
+  border-color:black;
+}
 /* CANVAS */
+
 canvas{
   position:absolute;
-  top:0;
-  left:0;
+  inset:0;
   z-index:1;
+}
+
+/* MOBILE */
+
+@media(max-width:768px){
+
+  h1{
+    font-size:20vw;
+    top:20px;
+    left:18px;
+  }
+
+  .top-nav{
+    top:auto;
+    bottom:24px;
+    right:50%;
+    transform:translateX(50%);
+    gap:10px;
+    flex-wrap:wrap;
+    justify-content:center;
+  }
+
+  .top-nav a{
+    padding:12px 18px;
+    font-size:14px;
+  }
 }
 
 </style>
@@ -115,45 +147,69 @@ canvas{
 
 <body>
 
-<!-- INTRO (added) -->
+<!-- INTRO -->
 <div id="intro">
   <div id="intro-text"></div>
 </div>
 
+<!-- TITLE -->
 <h1>MINSUNG</h1>
 
-<div class="hamburger" id="hamburger">
-  <div></div><div></div><div></div>
-</div>
-
-<div class="menu" id="menu">
+<!-- NAV -->
+<nav class="top-nav">
   <a href="pages/about/index.html">About</a>
   <a href="pages/projects/index.html">Projects</a>
   <a href="pages/contact/index.html">Contact</a>
-</div>
+</nav>
 
 <script type="module">
+
 import * as THREE from "https://unpkg.com/three@0.161.0/build/three.module.js";
 
 /* SCENE */
+
 const scene = new THREE.Scene();
 
 /* CAMERA */
-const camera = new THREE.PerspectiveCamera(40, innerWidth/innerHeight, 0.1, 1000);
+
+const camera =
+new THREE.PerspectiveCamera(
+  40,
+  innerWidth / innerHeight,
+  0.1,
+  1000
+);
+
 camera.position.z = 13;
 
 /* RENDERER */
-const renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
+
+const renderer =
+new THREE.WebGLRenderer({
+  antialias:true,
+  alpha:true
+});
+
 renderer.setSize(innerWidth, innerHeight);
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));
-document.body.appendChild(renderer.domElement);
+
+renderer.setPixelRatio(
+  Math.min(devicePixelRatio,1.5)
+);
+
+document.body.appendChild(
+  renderer.domElement
+);
 
 /* GROUP */
+
 const group = new THREE.Group();
+
 group.position.y = -0.2;
+
 scene.add(group);
 
 /* SETTINGS */
+
 const images = [
   "imgs/photo1.webp",
   "imgs/photo2.webp",
@@ -173,17 +229,22 @@ const baseHeight = baseWidth * 0.65;
 
 const objects = [];
 
-/* TEXTURE (rounded + flipped) */
+/* ROUNDED TEXTURE */
+
 function createTexture(img){
 
-  const canvas = document.createElement("canvas");
+  const canvas =
+    document.createElement("canvas");
+
   const size = 512;
 
   canvas.width = size;
   canvas.height = size;
 
-  const ctx = canvas.getContext("2d");
-  const r = 12;
+  const ctx =
+    canvas.getContext("2d");
+
+  const r = 18;
 
   ctx.clearRect(0,0,size,size);
 
@@ -198,176 +259,339 @@ function createTexture(img){
   ctx.lineTo(0,r);
   ctx.quadraticCurveTo(0,0,r,0);
   ctx.closePath();
+
   ctx.clip();
 
   ctx.translate(size,0);
   ctx.scale(-1,1);
 
-  ctx.drawImage(img,0,0,size,size);
+  ctx.drawImage(
+    img,
+    0,
+    0,
+    size,
+    size
+  );
 
   return new THREE.CanvasTexture(canvas);
 }
 
-/* CREATE RING */
+/* CREATE CAROUSEL */
+
 images.forEach((src,i)=>{
 
-  const angle = (i / images.length) * Math.PI * 2;
+  const angle =
+    (i / images.length)
+    * Math.PI * 2;
 
-  const x = Math.cos(angle) * radius;
-  const z = Math.sin(angle) * radius;
+  const x =
+    Math.cos(angle)
+    * radius;
 
-  const geometry = new THREE.PlaneGeometry(baseWidth, baseHeight);
+  const z =
+    Math.sin(angle)
+    * radius;
 
-  const material = new THREE.MeshBasicMaterial({
-    color:0xffffff,
-    side:THREE.DoubleSide,
-    transparent:true,
-    depthWrite:false
-  });
+  const geometry =
+    new THREE.PlaneGeometry(
+      baseWidth,
+      baseHeight
+    );
 
-  const plane = new THREE.Mesh(geometry, material);
+  const material =
+    new THREE.MeshBasicMaterial({
+      color:0xffffff,
+      side:THREE.DoubleSide,
+      transparent:true,
+      depthWrite:false
+    });
+
+  const plane =
+    new THREE.Mesh(
+      geometry,
+      material
+    );
 
   plane.position.set(x,0,z);
+
   plane.lookAt(0,0,0);
 
   group.add(plane);
+
   objects.push(plane);
 
   const img = new Image();
   img.src = src;
 
   img.onload = ()=>{
-    material.map = createTexture(img);
-    material.needsUpdate = true;
+
+    material.map =
+      createTexture(img);
+
+    material.needsUpdate =
+      true;
   };
 });
 
 /* RAYCAST */
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+
+const raycaster =
+  new THREE.Raycaster();
+
+const mouse =
+  new THREE.Vector2();
+
 let hovered = null;
 
 /* HOVER */
-renderer.domElement.addEventListener("mousemove", e=>{
 
-  if(menu.classList.contains("show")) return;
+renderer.domElement
+.addEventListener(
+"mousemove",
+e=>{
 
-  mouse.x = (e.clientX/innerWidth)*2-1;
-  mouse.y = -(e.clientY/innerHeight)*2+1;
+  mouse.x =
+    (e.clientX /
+    innerWidth)
+    * 2 - 1;
 
-  raycaster.setFromCamera(mouse,camera);
-  const hits = raycaster.intersectObjects(objects);
+  mouse.y =
+    -(e.clientY /
+    innerHeight)
+    * 2 + 1;
+
+  raycaster
+    .setFromCamera(
+      mouse,
+      camera
+    );
+
+  const hits =
+    raycaster
+    .intersectObjects(objects);
 
   if(hits.length){
-    const obj = hits[0].object;
+
+    const obj =
+      hits[0].object;
 
     if(hovered !== obj){
+
       if(hovered){
-        hovered.material.color.set(0xffffff);
+        hovered.material
+        .color
+        .set(0xffffff);
       }
+
       hovered = obj;
-      obj.material.color.setRGB(1.3,1.3,1.3);
+
+      obj.material.color
+      .setRGB(
+        1.25,
+        1.25,
+        1.25
+      );
     }
+
   } else if(hovered){
-    hovered.material.color.set(0xffffff);
+
+    hovered.material
+      .color
+      .set(0xffffff);
+
     hovered = null;
   }
 });
 
 /* CLICK */
-renderer.domElement.addEventListener("click", e=>{
 
-  if(menu.classList.contains("show")) return;
+renderer.domElement
+.addEventListener(
+"click",
+e=>{
 
-  mouse.x = (e.clientX/innerWidth)*2-1;
-  mouse.y = -(e.clientY/innerHeight)*2+1;
+  mouse.x =
+    (e.clientX /
+    innerWidth)
+    * 2 - 1;
 
-  raycaster.setFromCamera(mouse,camera);
-  const hits = raycaster.intersectObjects(objects);
+  mouse.y =
+    -(e.clientY /
+    innerHeight)
+    * 2 + 1;
+
+  raycaster
+    .setFromCamera(
+      mouse,
+      camera
+    );
+
+  const hits =
+    raycaster
+    .intersectObjects(objects);
 
   if(hits.length){
-    const index = objects.indexOf(hits[0].object);
-    window.open(urls[index % urls.length], "_blank");
+
+    const index =
+      objects.indexOf(
+        hits[0].object
+      );
+
+    window.location.href =
+      urls[
+        index %
+        urls.length
+      ];
   }
 });
 
 /* ANIMATION */
+
 function animate(){
-  requestAnimationFrame(animate);
-  group.rotation.y += 0.002;
-  renderer.render(scene,camera);
+
+  requestAnimationFrame(
+    animate
+  );
+
+  group.rotation.y +=
+    0.002;
+
+  renderer.render(
+    scene,
+    camera
+  );
 }
+
 animate();
 
 /* RESIZE */
-window.addEventListener("resize", ()=>{
-  camera.aspect = innerWidth/innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(innerWidth,innerHeight);
+
+window
+.addEventListener(
+"resize",
+()=>{
+
+  camera.aspect =
+    innerWidth /
+    innerHeight;
+
+  camera
+    .updateProjectionMatrix();
+
+  renderer.setSize(
+    innerWidth,
+    innerHeight
+  );
 });
 
-/* MENU */
-const hamburger = document.getElementById("hamburger");
-const menu = document.getElementById("menu");
+/* INTRO */
 
-hamburger.onclick = ()=>{
-  hamburger.classList.toggle("active");
-  menu.classList.toggle("show");
-};
+const intro =
+document.getElementById(
+  "intro"
+);
 
-/* CLICK OUTSIDE CLOSE */
-document.addEventListener("click", (e)=>{
-  if(!menu.contains(e.target) && !hamburger.contains(e.target)){
-    menu.classList.remove("show");
-    hamburger.classList.remove("active");
-  }
-});
+const introText =
+document.getElementById(
+  "intro-text"
+);
 
-/* INTRO SCRIPT (added only) */
-const intro = document.getElementById("intro");
-const introText = document.getElementById("intro-text");
+const finalText =
+"MINSUNG";
 
-const finalText = "MINSUNG";
-const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const chars =
+"ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
 let letters = [];
+
 let frame = 0;
 let revealSpeed = 5;
 
-finalText.split("").forEach(()=>{
-  const span = document.createElement("span");
-  span.className = "letter";
-  introText.appendChild(span);
+finalText
+.split("")
+.forEach(()=>{
+
+  const span =
+    document
+    .createElement(
+      "span"
+    );
+
+  span.className =
+    "letter";
+
+  introText
+    .appendChild(
+      span
+    );
+
   letters.push(span);
 });
 
 function animateIntro(){
 
-  letters.forEach((el,i)=>{
+  letters.forEach(
+  (el,i)=>{
 
-    if(i < frame / revealSpeed){
-      el.innerText = finalText[i];
-      el.style.transform = "translateY(0px) scaleY(1)";
+    if(
+      i <
+      frame /
+      revealSpeed
+    ){
+
+      el.innerText =
+        finalText[i];
+
+      el.style.transform =
+        "translateY(0px) scaleY(1)";
+
     } else {
-      el.innerText = chars[Math.floor(Math.random()*chars.length)];
 
-      const x = (Math.random()-0.5)*10;
-      const y = (Math.random()-0.5)*20;
+      el.innerText =
+        chars[
+          Math.floor(
+            Math.random()
+            * chars.length
+          )
+        ];
 
-      el.style.transform = `translate(${x}px, ${y}px) scaleY(${1 + Math.random()*0.4})`;
+      const x =
+        (Math.random()
+        -0.5) * 10;
+
+      const y =
+        (Math.random()
+        -0.5) * 20;
+
+      el.style.transform =
+        `translate(${x}px,${y}px)
+        scaleY(${1 +
+        Math.random()*0.4})`;
     }
 
   });
 
   frame++;
 
-  if(frame < finalText.length * revealSpeed + 15){
-    requestAnimationFrame(animateIntro);
+  if(
+    frame <
+    finalText.length
+    * revealSpeed + 15
+  ){
+
+    requestAnimationFrame(
+      animateIntro
+    );
+
   } else {
 
     setTimeout(()=>{
-      intro.style.transition = "opacity 0.8s ease";
-      intro.style.opacity = "0";
+
+      intro.style.transition =
+        "opacity .8s ease";
+
+      intro.style.opacity =
+        "0";
 
       setTimeout(()=>{
         intro.remove();
