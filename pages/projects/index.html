@@ -19,55 +19,15 @@ html{
 }
 
 body{
-  background:#181818;
+  background:#f8f8f6;
   overflow-x:hidden;
   font-family:Arial, Helvetica, sans-serif;
 }
 
-/* -----------------------
-   HAMBURGER MENU
------------------------ */
-
-.hamburger{
-  position:fixed;
-  top:24px;
-  right:24px;
-  width:52px;
-  height:52px;
-  cursor:pointer;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  gap:6px;
-  z-index:9999;
-
-  background:black;
-  border-radius:999px;
-  padding:12px;
-}
-
-.hamburger div{
-  height:2px;
-  background:white;
-  transition:.3s ease;
-}
-
-.hamburger.active div:nth-child(1){
-  transform:rotate(45deg) translate(8px,8px);
-}
-
-.hamburger.active div:nth-child(2){
-  opacity:0;
-}
-
-.hamburger.active div:nth-child(3){
-  transform:rotate(-45deg) translate(8px,-8px);
-}
-
 .menu{
   position:fixed;
-  top:85px;
-  right:24px;
+  top:60px;
+  right:40px;
 
   display:flex;
   flex-direction:column;
@@ -75,31 +35,129 @@ body{
 
   opacity:0;
   pointer-events:none;
-  transition:.3s ease;
+
+  transition:.25s ease;
 
   z-index:9998;
 
-  background:black;
-  padding:18px 20px;
-  border-radius:16px;
+  background:rgba(255,255,255,.7);
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  border:1px solid rgba(255,255,255,.5);
+
+  padding:20px;
+
+  border-radius:14px;
 
   min-width:140px;
+}
+
+.menu a{
+  text-decoration:none;
+
+  color:#111;
+
+  font-size:13px;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+
+  transition:.2s ease;
+}
+
+.menu a:hover{
+  opacity:.45;
+}
+/* -----------------------
+   HERO
+----------------------- */
+
+.hero{
+  padding:80px 40px 24px;
+}
+
+.hero-name{
+  font-size:14px;
+  letter-spacing:.08em;
+  margin-bottom:12px;
+  color:#666;
+}
+
+.hero-title{
+  font-size:clamp(48px,8vw,120px);
+  font-weight:300;
+  line-height:.95;
+
+  margin-bottom:48px;
+}
+
+/* -----------------------
+   FILTER
+----------------------- */
+
+.filter-bar{
+  position:sticky;
+  top:0;
+
+  z-index:100;
+
+  background:#f8f8f6;
+
+  padding:14px 0;
+
+  display:flex;
+  gap:24px;
+  flex-wrap:wrap;
+}
+
+.filter-btn{
+  background:none;
+  border:none;
+
+  cursor:pointer;
+
+  font-size:15px;
+  color:#999;
+
+  transition:.2s ease;
+}
+
+.filter-btn:hover{
+  color:black;
+}
+
+.filter-btn.active{
+  color:black;
+}
+
+.menu-trigger{
+  position:fixed;
+  top:32px;
+  right:40px;
+
+  z-index:9999;
+
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+
+  cursor:pointer;
+
+  color:#111;
+
+  transition:.2s ease;
+}
+
+.menu-trigger:hover{
+  opacity:.5;
 }
 
 .menu.show{
   opacity:1;
   pointer-events:auto;
-}
-
-.menu a{
-  color:white;
-  text-decoration:none;
-  font-size:14px;
-  transition:opacity .2s ease;
-}
-
-.menu a:hover{
-  opacity:0.6;
 }
 
 /* -----------------------
@@ -108,14 +166,32 @@ body{
 
 .projects-feed{
   width:100%;
+
+  padding: 0 40px 40px;
 }
 
 .project-card{
   width:100%;
-  height:100vh;
-  cursor:pointer;
-  overflow:hidden;
+  height:88vh;
+
   position:relative;
+  overflow:hidden;
+  cursor:pointer;
+
+  margin-bottom:28px;
+
+  background:white;
+
+  border-radius:12px;
+
+  box-shadow:
+  0 2px 6px rgba(0,0,0,.04),
+  0 8px 16px rgba(0,0,0,.04);
+}
+
+
+.project-card:last-child{
+  margin-bottom:0;
 }
 
 .project-card img,
@@ -124,16 +200,15 @@ body{
   height:100%;
   object-fit:cover;
   display:block;
-  transition:transform 0.8s ease;
+
+  transition:
+    transform .9s ease,
+    filter .9s ease;
 }
 
 .project-card:hover img,
 .project-card:hover .placeholder{
-  transform:scale(1.03);
-}
-
-.placeholder{
-  background:#242424;
+  transform:scale(1.02);
 }
 
 /* -----------------------
@@ -143,14 +218,18 @@ body{
 .popup-overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.65);
-  backdrop-filter:blur(6px);
+
+  background:rgba(255,255,255,.08);
+
   display:flex;
   justify-content:center;
   align-items:center;
+
   opacity:0;
   pointer-events:none;
-  transition:0.3s ease;
+
+  transition:.3s ease;
+
   z-index:10000;
 }
 
@@ -160,77 +239,124 @@ body{
 }
 
 .popup{
-  width:65vw;
-  height:65vh;
-  background:white;
-  color:black;
-  padding:48px;
-  position:relative;
-  overflow-y:auto;
-  transform:translateY(20px);
-  transition:.3s ease;
+  width:min(680px,80vw);
+
+  padding:40px;
+
+  background:
+    rgba(255,255,255,.28);
+
+  backdrop-filter:
+    blur(24px)
+    saturate(180%);
+
+  -webkit-backdrop-filter:
+    blur(24px)
+    saturate(180%);
+
+  border:
+    1px solid
+    rgba(255,255,255,.5);
+
+  border-radius:20px;
+
+  box-shadow:
+    0 8px 32px rgba(0,0,0,.08),
+    inset 0 1px 0 rgba(255,255,255,.5);
 }
 
 .popup-overlay.active .popup{
   transform:translateY(0);
 }
 
-/* Close button */
-
 .close-popup{
   position:absolute;
   top:20px;
   right:24px;
+
   border:none;
   background:none;
+
   font-size:28px;
   cursor:pointer;
   color:black;
 }
 
-/* Popup content */
-
 .popup-category{
-  font-size:14px;
+  font-size:12px;
+
+  letter-spacing:.14em;
+
   text-transform:uppercase;
-  letter-spacing:.08em;
-  color:#777;
-  margin-bottom:12px;
+
+  color:#666;
+
+  margin-bottom:10px;
 }
 
 .popup-title{
-  font-size:clamp(36px,4vw,72px);
-  font-weight:300;
-  margin-bottom:28px;
+  font-size:clamp(42px,5vw,72px);
+
+  line-height:.9;
+
+  margin-bottom:24px;
+
+  font-weight:600;
 }
 
 .popup-description{
-  font-size:18px;
-  line-height:1.8;
-  max-width:700px;
-  margin-bottom:36px;
+  font-size:16px;
+
+  line-height:1.9;
+
+  max-width:620px;
+
+  margin-bottom:28px;
 }
 
 .popup-link{
-  display:inline-block;
-  color:black;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+
+  color:#111;
   text-decoration:none;
-  border-bottom:1px solid black;
-  font-size:18px;
+
+  font-size:14px;
+  font-weight:500;
+  letter-spacing:.04em;
+
+  transition:.25s ease;
 }
 
 .popup-link:hover{
-  opacity:0.6;
+  opacity:.6;
 }
 
-/* Mobile */
+/* -----------------------
+   MOBILE
+----------------------- */
 
 @media(max-width:768px){
 
+  .projects-feed{
+    padding:12px;
+  }
+
+  .project-card{
+    height:70vh;
+    margin-bottom:12px;
+    border-radius:8px;
+  }
+
   .popup{
-    width:90vw;
+    width:92vw;
     height:80vh;
     padding:28px;
+  }
+
+  .popup-title{
+    font-size:36px;
   }
 
   .popup-description{
@@ -243,10 +369,8 @@ body{
 <body>
 
 <!-- HAMBURGER -->
-<div class="hamburger" id="hamburger">
-  <div></div>
-  <div></div>
-  <div></div>
+<div class="menu-trigger" id="hamburger">
+  MENU
 </div>
 
 <!-- MENU -->
@@ -255,6 +379,55 @@ body{
   <a href="../../pages/about/index.html">About</a>
   <a href="../../pages/contact/index.html">Contact</a>
 </div>
+
+<section class="hero">
+
+
+  <div class="filter-bar">
+
+    <button class="filter-btn active"
+      data-filter="all">
+      All
+    </button>
+
+    <button class="filter-btn"
+      data-filter="Website">
+      Website
+    </button>
+
+    <button class="filter-btn"
+      data-filter="Book">
+      Book
+    </button>
+
+    <button class="filter-btn"
+      data-filter="Poster">
+      Poster
+    </button>
+
+    <button class="filter-btn"
+      data-filter="Typeface">
+      Typeface
+    </button>
+
+    <button class="filter-btn"
+      data-filter="Archive">
+      Archive
+    </button>
+
+    <button class="filter-btn"
+      data-filter="Exhibition">
+      Exhibition
+    </button>
+
+    <button class="filter-btn"
+      data-filter="Objects">
+      Objects
+    </button>
+
+  </div>
+
+</section>
 
 <!-- PROJECTS -->
 <div class="projects-feed">
@@ -344,7 +517,9 @@ body{
     translating digital letterforms into resin 3D-printed movable type. Designed through Blender and fabricated using Lychee Slicer, the project consists of 40 characters, including alphabets, numbers, and punctuation."
     data-link="project8.html">
 
-    <div class="placeholder"></div>
+    <img src="../imgs/photo11.webp" alt="">
+
+    
   </div>
 
   <!-- StoryType -->
@@ -356,7 +531,7 @@ body{
     data-link="project8.html">
 
     <img src="../imgs/photo10.webp" alt="">
-  </div>
+   </div>
 
     <!-- StoryType -->
     <div class="project-card"
@@ -531,6 +706,49 @@ document.addEventListener(
     }
   }
 );
+
+/* -----------------------
+   FILTER
+----------------------- */
+
+const filterButtons =
+document.querySelectorAll(".filter-btn");
+
+const cards =
+document.querySelectorAll(".project-card");
+
+filterButtons.forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    filterButtons.forEach(btn=>{
+      btn.classList.remove("active");
+    });
+
+    button.classList.add("active");
+
+    const filter =
+    button.dataset.filter;
+
+    cards.forEach(card=>{
+
+      const category =
+      card.dataset.category;
+
+      if(
+        filter === "all" ||
+        category === filter
+      ){
+        card.style.display = "block";
+      }else{
+        card.style.display = "none";
+      }
+
+    });
+
+  });
+
+});
 
 </script>
 

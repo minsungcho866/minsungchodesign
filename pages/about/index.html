@@ -8,99 +8,233 @@
 <link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
 
 <style>
-body {
-  margin: 0;
-  background: #181818;
-  color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
+body{
+  margin:0;
+
+  background:#f8f8f6;
+  color:#111;
+
+  font-family:Arial, Helvetica, sans-serif;
 }
 
 /* Layout */
-.container {
-  max-width: 900px;
-  margin: 120px auto;
-  padding: 0 20px;
+
+/* -------------------
+LAYOUT
+------------------- */
+
+.container{
+  padding:
+    120px
+    40px
+    80px;
 }
 
-/* Title */
-h1 {
-  font-size: 20px;
-  font-weight: 300;
-  margin-bottom: 60px;
-  text-align: center;
+/* -------------------
+TITLE
+------------------- */
+
+.page-label{
+  font-size:12px;
+
+  letter-spacing:.14em;
+  text-transform:uppercase;
+
+  color:#777;
+
+  margin-bottom:12px;
 }
 
-/* About Text */
-.about-text {
-  font-size: 28px;
-  line-height: 1.6;
-  color: #aaa;
-  max-width: 720px;
+h1{
+  font-size:clamp(48px,8vw,120px);
 
-  white-space: pre-line;
-  text-align: center;
-  margin: 0 auto;
+  line-height:.92;
+
+  font-weight:300;
+
+  margin:0 0 80px;
 }
-
-/* Add real spacing between lines */
-.about-text br {
-  display: block;
-  margin-bottom: 12px;
-}
-
-/* Character animation */
-.about-text span {
-  display: inline-block;
-  transition: transform 0.15s ease, color 0.2s ease;
+/* -------------------
+ABOUT
+------------------- */
+.about-sidebar{
+  display:flex;
+  flex-direction:column;
+  gap:24px;
 }
 
-/* Hamburger */
-.hamburger {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 35px;
-  height: 30px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.hamburger div {
-  height: 3px;
-  background: #fff;
-  transition: 0.3s;
-}
-.hamburger.active div:nth-child(1){
-  transform: rotate(45deg) translate(6px,6px);
-}
-.hamburger.active div:nth-child(2){opacity:0;}
-.hamburger.active div:nth-child(3){
-  transform: rotate(-45deg) translate(7px,-7px);
+.profile-placeholder{
+  width:220px;
+  aspect-ratio:4/5;
+
+  border-radius:12px;
+
+  background:white;
+
+  border:1px solid rgba(0,0,0,.06);
+
+  box-shadow:
+    0 2px 6px rgba(0,0,0,.04),
+    0 8px 16px rgba(0,0,0,.04);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  font-size:12px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+
+  color:#999;
 }
 
-/* Menu */
-.menu {
-  position: absolute;
-  top: 70px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.3s;
+.profile-placeholder img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+  border-radius:12px;
 }
-.menu.show {
-  opacity: 1;
-  pointer-events: auto;
+
+.about-grid{
+  display:grid;
+
+  grid-template-columns:
+    260px
+    minmax(420px, 560px);
+
+  gap:72px;
+
+  align-items:start;
 }
-.menu a {
-  color: #fff;
-  text-decoration: none;
-  margin-bottom: 10px;
+
+.about-name{
+  font-size:16px;
+  color:#111;
 }
-.menu a:hover {
-  text-decoration: underline;
+
+.about-meta{
+  margin-top:12px;
+
+  font-size:13px;
+
+  line-height:1.7;
+
+  color:#777;
+}
+.about-text{
+  max-width:480px;
+  font-size:22px;
+
+  line-height:1.65;
+
+  color:#666;
+}
+
+.about-text br{
+  display:block;
+  margin-bottom:12px;
+}
+
+.about-text span{
+  display:inline-block;
+
+  transition:
+    transform .15s ease,
+    color .2s ease;
+}
+
+.menu-trigger{
+  position:fixed;
+  top:32px;
+  right:40px;
+
+  z-index:9999;
+
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+
+  cursor:pointer;
+  color:#111;
+
+  transition:.2s ease;
+}
+
+.menu-trigger:hover{
+  opacity:.5;
+}
+
+.menu{
+  position:fixed;
+  top:60px;
+  right:40px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:.25s ease;
+
+  z-index:9998;
+
+  background:rgba(255,255,255,.72);
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  border:1px solid rgba(255,255,255,.55);
+
+  padding:20px;
+
+  border-radius:14px;
+
+  min-width:140px;
+}
+
+.menu.show{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.menu a{
+  text-decoration:none;
+  color:#111;
+
+  font-size:13px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+
+  transition:.2s ease;
+}
+
+.menu a:hover{
+  opacity:.45;
+}
+
+.resume-link{
+  display:inline-block;
+
+  margin-top:20px;
+
+  text-decoration:none;
+
+  font-size:13px;
+
+  letter-spacing:.08em;
+
+  text-transform:uppercase;
+
+  color:#111;
+
+  transition:.2s ease;
+}
+
+.resume-link:hover{
+  opacity:.45;
 }
 
 /* -------- MOBILE -------- */
@@ -139,8 +273,8 @@ h1 {
 <body>
 
 <!-- Hamburger -->
-<div class="hamburger" id="hamburger">
-  <div></div><div></div><div></div>
+<div class="menu-trigger" id="hamburger">
+  MENU
 </div>
 
 <!-- Menu -->
@@ -152,27 +286,51 @@ h1 {
 
 <!-- Content -->
 <div class="container">
-  <h1>About</h1>
 
-  <div class="about-text" id="aboutText">
-Designer
-
-Based in
-NYC / Seoul
-
-
-Education
-Parsons School of Design — BFA Communication Design
-
-
-Designer @ Angel Music
-
-
-Served in
-ROK Army — driver / interpreter (U.S. joint operations)
+  <div class="page-label">
+    About
   </div>
-</div>
+  <div class="about-grid">
 
+    <div class="about-sidebar">
+  
+      <div class="profile-placeholder">
+        <img src="../imgs/profile.webp" alt="">
+      </div>
+  
+      <div class="about-name">
+        Minsung Cho
+  
+        <div class="about-meta">
+          Designer<br>
+          NYC / Seoul
+        </div>
+    
+        <a
+          class="resume-link"
+          href="resume.pdf"
+          target="_blank">
+          Resume ↗
+        </a>
+    
+      </div>
+  
+    </div>
+  
+    <div class="about-text" id="aboutText">
+  Designer based in NYC / Seoul.
+  
+  Focused on graphic design,
+  type design, interactive media,
+  and visual systems.
+  
+  Currently studying Communication Design
+  at Parsons School of Design.
+  
+  Previously served in the ROK Army as a driver and interpreter.
+    </div>
+  
+  </div>
 <script>
 /* Hamburger */
 const hamburger = document.getElementById("hamburger");
@@ -215,8 +373,8 @@ function handleMove(x, y) {
 
       span.style.transform =
         `translate(${dx * 0.03 * force}px, ${dy * 0.03 * force}px)`;
-      span.style.color = "#fff";
-    } else {
+        span.style.color = "#111";
+        } else {
       span.style.transform = "translate(0,0)";
       span.style.color = "#aaa";
     }

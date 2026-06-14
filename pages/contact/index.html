@@ -8,103 +8,179 @@
 <link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
 
 <style>
-body {
-  margin: 0;
-  background: #181818;
-  color: #fff;
-  font-family: Arial, Helvetica, sans-serif;
+body{
+  margin:0;
+
+  background:#f8f8f6;
+  color:#111;
+
+  font-family:Arial, Helvetica, sans-serif;
 }
 
-/* SAME container as projects */
-.container {
-  max-width: 900px;
-  margin: 120px auto;
-  padding: 0 20px;
+/* -------------------
+MENU
+------------------- */
+
+.menu-trigger{
+  position:fixed;
+  top:32px;
+  right:40px;
+
+  z-index:9999;
+
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+
+  cursor:pointer;
+
+  color:#111;
+
+  transition:.2s ease;
 }
 
-/* SAME title style */
-h1 {
-  font-size: 20px;
-  font-weight: 300;
-  margin-bottom: 60px;
+.menu-trigger:hover{
+  opacity:.5;
+}
+.menu{
+  position:fixed;
+  top:60px;
+  right:40px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:.25s ease;
+
+  z-index:9998;
+
+  background:rgba(255,255,255,.7);
+
+  backdrop-filter:blur(12px);
+  -webkit-backdrop-filter:blur(12px);
+
+  border:1px solid rgba(255,255,255,.5);
+
+  padding:20px;
+
+  border-radius:14px;
+
+  min-width:140px;
 }
 
-/* SAME text rhythm as project list */
-.contact-list {
-  display: flex;
-  flex-direction: column;
-  gap: 25px;
+.menu.show{
+  opacity:1;
+  pointer-events:auto;
 }
 
-/* Match project-item style */
-.contact-item {
-  font-size: 28px;
-  color: #aaa;
-  text-decoration: none;
-  transition: 0.3s;
+.menu a{
+  text-decoration:none;
+  color:#111;
+
+  font-size:13px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+
+  transition:.2s ease;
 }
 
-.contact-item:hover {
-  color: #fff;
+.menu a:hover{
+  opacity:.45;
 }
 
-/* Links */
-.contact-item a {
-  color: inherit;
-  text-decoration: none;
+
+
+/* -------------------
+LAYOUT
+------------------- */
+
+.container{
+
+  margin:0 auto;
+
+  padding:
+    120px
+    40px
+    80px;
 }
 
-.contact-item a:hover {
-  text-decoration: underline;
+/* -------------------
+TITLE
+------------------- */
+
+.page-label{
+  font-size:12px;
+
+  letter-spacing:.14em;
+
+  text-transform:uppercase;
+
+  color:#777;
+
+  margin-bottom:12px;
 }
 
-/* ----------------- Hamburger ----------------- */
-.hamburger {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  width: 35px;
-  height: 30px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-.hamburger div {
-  height: 3px;
-  background: #fff;
-  transition: 0.3s;
-}
-.hamburger.active div:nth-child(1){
-  transform: rotate(45deg) translate(6px,6px);
-}
-.hamburger.active div:nth-child(2){opacity:0;}
-.hamburger.active div:nth-child(3){
-  transform: rotate(-45deg) translate(7px,-7px);
+h1{
+  font-size:clamp(48px,8vw,120px);
+
+  line-height:.92;
+
+  font-weight:300;
+
+  margin:0 0 60px;
 }
 
-/* Menu */
-.menu {
-  position: absolute;
-  top: 70px;
-  right: 20px;
-  display: flex;
-  flex-direction: column;
-  opacity: 0;
-  pointer-events: none;
-  transition: 0.3s;
+/* -------------------
+CONTACT LIST
+------------------- */
+
+.contact-list{
+  display:flex;
+  flex-direction:column;
+
+  gap:32px;
 }
-.menu.show {
-  opacity: 1;
-  pointer-events: auto;
+
+.contact-item{
+  display:flex;
+
+  justify-content:space-between;
+
+  align-items:flex-end;
+
+  padding-bottom:18px;
+
+  border-bottom:
+    1px solid
+    rgba(0,0,0,.08);
 }
-.menu a {
-  color: #fff;
-  text-decoration: none;
-  margin-bottom: 10px;
+
+.contact-label{
+  font-size:14px;
+
+  color:#777;
+
+  text-transform:uppercase;
+
+  letter-spacing:.08em;
 }
-.menu a:hover {
-  text-decoration: underline;
+
+.contact-value a{
+  text-decoration:none;
+
+  color:#111;
+
+  font-size:28px;
+
+  transition:.25s ease;
+}
+
+.contact-value a:hover{
+  opacity:.5;
 }
 </style>
 </head>
@@ -112,8 +188,8 @@ h1 {
 <body>
 
 <!-- Hamburger -->
-<div class="hamburger" id="hamburger">
-  <div></div><div></div><div></div>
+<div class="menu-trigger" id="hamburger">
+  MENU
 </div>
 
 <!-- Menu -->
@@ -122,24 +198,62 @@ h1 {
   <a href="../../pages/about/index.html">About</a>
   <a href="../../pages/projects/index.html">Projects</a>
 </div>
-
-<!-- Content -->
 <div class="container">
-  <h1>Contact</h1>
+
+  <div class="page-label">
+   
+  </div>
+
+  <h1>
+    Contact.
+  </h1>
 
   <div class="contact-list">
+
     <div class="contact-item">
-      Email: <a href="mailto:ryancho8765@gmail.com">ryancho8765@gmail.com</a>
+
+      <div class="contact-label">
+        Email
+      </div>
+
+      <div class="contact-value">
+        <a href="mailto:ryancho8765@gmail.com">
+          ryancho8765@gmail.com
+        </a>
+      </div>
+
     </div>
 
     <div class="contact-item">
-      Phone: <a href="tel:-">-</a>
+
+      <div class="contact-label">
+        Instagram
+      </div>
+
+      <div class="contact-value">
+        <a href="https://instagram.com/minsung.wh" target="_blank">
+          @minsung.wh
+        </a>
+      </div>
+
     </div>
 
     <div class="contact-item">
-      Instagram: <a href="https://instagram.com/minsung.wh" target="_blank">@minsung.wh</a>
+
+      <div class="contact-label">
+        Are.na
+      </div>
+
+      <div class="contact-value">
+        <a href="https://www.are.na/minsung-cho/channels" target="_blank">
+          View Channel
+        </a>
+      </div>
+
     </div>
+
   </div>
+
 </div>
 
 <script>
