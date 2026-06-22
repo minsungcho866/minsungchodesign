@@ -219,7 +219,7 @@ body{
   position:fixed;
   inset:0;
 
-  background:rgba(255,255,255,.08);
+  background:rgba(0,0,0,.4);
 
   display:flex;
   justify-content:center;
@@ -239,30 +239,16 @@ body{
 }
 
 .popup{
-  width:min(680px,80vw);
+  position:relative;
+  width:min(720px,90vw);
+  max-height:90vh;
+  overflow-y:auto;
 
-  padding:40px;
+  background:#fff;
 
-  background:
-    rgba(255,255,255,.28);
+  border-radius:16px;
 
-  backdrop-filter:
-    blur(24px)
-    saturate(180%);
-
-  -webkit-backdrop-filter:
-    blur(24px)
-    saturate(180%);
-
-  border:
-    1px solid
-    rgba(255,255,255,.5);
-
-  border-radius:20px;
-
-  box-shadow:
-    0 8px 32px rgba(0,0,0,.08),
-    inset 0 1px 0 rgba(255,255,255,.5);
+  box-shadow:0 16px 48px rgba(0,0,0,.12);
 }
 
 .popup-overlay.active .popup{
@@ -271,47 +257,75 @@ body{
 
 .close-popup{
   position:absolute;
-  top:20px;
-  right:24px;
+  top:16px;
+  right:20px;
 
   border:none;
-  background:none;
+  background:rgba(255,255,255,.8);
+  width:36px;
+  height:36px;
+  border-radius:50%;
 
-  font-size:28px;
+  font-size:22px;
+  line-height:36px;
+  text-align:center;
   cursor:pointer;
-  color:black;
+  color:#111;
+
+  z-index:2;
+  transition:.2s ease;
 }
 
-.popup-category{
-  font-size:12px;
+.close-popup:hover{
+  background:rgba(255,255,255,1);
+}
 
-  letter-spacing:.14em;
+.popup-carousel{
+  position:relative;
+  width:100%;
+  aspect-ratio:16/9;
+  overflow:hidden;
+  border-radius:16px 16px 0 0;
+  background:#eee;
+}
 
-  text-transform:uppercase;
+.popup-carousel img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
 
-  color:#666;
-
-  margin-bottom:10px;
+.popup-body{
+  padding:32px 36px 36px;
 }
 
 .popup-title{
-  font-size:clamp(42px,5vw,72px);
+  font-size:clamp(32px,5vw,56px);
+  line-height:1;
+  margin-bottom:8px;
+  font-weight:700;
+}
 
-  line-height:.9;
-
-  margin-bottom:24px;
-
-  font-weight:600;
+.popup-category{
+  font-size:13px;
+  color:#666;
+  margin-bottom:20px;
 }
 
 .popup-description{
-  font-size:16px;
-
-  line-height:1.9;
-
+  font-size:15px;
+  line-height:1.8;
   max-width:620px;
+  margin-bottom:32px;
+  color:#333;
+}
 
-  margin-bottom:28px;
+.popup-actions{
+  display:flex;
+  justify-content:flex-end;
+  align-items:center;
+  gap:16px;
 }
 
 .popup-link{
@@ -322,15 +336,33 @@ body{
   color:#111;
   text-decoration:none;
 
-  font-size:14px;
-  font-weight:500;
-  letter-spacing:.04em;
+  font-size:16px;
+  font-weight:600;
+  letter-spacing:.02em;
 
   transition:.25s ease;
 }
 
 .popup-link:hover{
   opacity:.6;
+}
+
+.popup-contact-link{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+
+  color:#666;
+  text-decoration:none;
+
+  font-size:14px;
+  font-weight:500;
+
+  transition:.25s ease;
+}
+
+.popup-contact-link:hover{
+  color:#111;
 }
 
 /* -----------------------
@@ -344,23 +376,55 @@ body{
   }
 
   .project-card{
-    height:70vh;
+    height:auto;
+    aspect-ratio:4/3;
     margin-bottom:12px;
     border-radius:8px;
   }
 
   .popup{
-    width:92vw;
-    height:80vh;
-    padding:28px;
+    width:95vw;
+    max-height:90vh;
+  }
+
+  .popup-body{
+    padding:24px 20px 28px;
   }
 
   .popup-title{
-    font-size:36px;
+    font-size:28px;
   }
 
   .popup-description{
-    font-size:16px;
+    font-size:14px;
+  }
+
+  .popup-actions{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:12px;
+  }
+
+  .hero{
+    padding:60px 12px 16px;
+  }
+
+  .filter-bar{
+    gap:14px;
+  }
+
+  .filter-btn{
+    font-size:13px;
+  }
+
+  .menu-trigger{
+    top:24px;
+    right:24px;
+  }
+
+  .menu{
+    top:52px;
+    right:24px;
   }
 }
 </style>
@@ -435,155 +499,155 @@ body{
   <!-- Cole + Ice -->
   <div class="project-card"
     data-category="Website"
-    data-title="Cole + Ice"
-    data-description="Cole+Ice is an interactive web project inspired by an Asia Society event, translating climate change into a responsive digital experience. Powered by a realtime weather API, the interface gradually “melts” as 
-    temperatures rise, creating a visual reflection on fragility and environmental change."
-    data-link="https://chom866.interactive.rodeo/studio/projects/P3/mainpage.html">
+    data-title="Coal + Ice"
+    data-description="Coal+Ice is an interactive web project inspired by an Asia Society event, translating climate change into a responsive digital experience. Powered by a realtime weather API, the interface gradually melts as temperatures rise, creating a visual reflection on fragility and environmental change."
+    data-link="https://chom866.interactive.rodeo/studio/projects/P3/mainpage.html"
+    data-image="../imgs/background05.webp">
 
-    <img src="../imgs/background05.webp" alt="">
+    <img src="../imgs/background05.webp" alt="Coal + Ice interactive climate web experience">
   </div>
 
-    <!-- Wallet Saver -->
-    <div class="project-card"
+  <!-- Wallet Saver -->
+  <div class="project-card"
     data-category="Website"
     data-title="Wallet Saver Map"
-    data-description="WALLET SAVER MAP is a web-based information design project that helps college students navigate Manhattan on a limited budget. 
-    Restaurants are categorized by affordability—high, medium, and low cost—creating an intuitive system for discovering budget-friendly dining options."
-    data-link="https://chom866.interactive.rodeo/studio/projects/P2/mainpage/index.html">
+    data-description="WALLET SAVER MAP is a web-based information design project that helps college students navigate Manhattan on a limited budget. Restaurants are categorized by affordability—high, medium, and low cost—creating an intuitive system for discovering budget-friendly dining options."
+    data-link="https://chom866.interactive.rodeo/studio/projects/P2/mainpage/index.html"
+    data-image="../imgs/background01.webp">
 
-    <img src="../imgs/background01.webp" alt="">
+    <img src="../imgs/background01.webp" alt="Wallet Saver Map budget dining guide for Manhattan">
   </div>
 
   <!-- Home -->
   <div class="project-card"
     data-category="Book"
     data-title="Home"
-    data-description="Home is a editorial book exploring the idea of home through the experience of growing up across multiple places without a fixed hometown. 
-    Combining three articles into a unified editorial design, the project reflects on themes of identity, displacement, and belonging."
-    data-link="project2/index.html">
+    data-description="Home is an editorial book exploring the idea of home through the experience of growing up across multiple places without a fixed hometown. Combining three articles into a unified editorial design, the project reflects on themes of identity, displacement, and belonging."
+    data-link="project2/index.html"
+    data-image="../imgs/background02.webp">
 
-    <img src="../imgs/background02.webp" alt="">
+    <img src="../imgs/background02.webp" alt="Home editorial book about identity and belonging">
   </div>
 
   <!-- History of Video Games -->
   <div class="project-card"
     data-category="Book"
     data-title="History of Video Games"
-    data-description="History of Video Games is an editorial book project based on the Wikipedia article History of Video Games. 
-    Using the text as a foundation, each section is designed to reflect the visual identity and aesthetics of video games from its respective era."
-    data-link="project4.html">
+    data-description="History of Video Games is an editorial book project based on the Wikipedia article History of Video Games. Using the text as a foundation, each section is designed to reflect the visual identity and aesthetics of video games from its respective era."
+    data-link=""
+    data-image="../imgs/background04.webp">
 
-    <img src="../imgs/background04.webp" alt="">
+    <img src="../imgs/background04.webp" alt="History of Video Games editorial book design">
   </div>
 
   <!-- 12 Rules -->
   <div class="project-card"
     data-category="Poster"
     data-title="12 Rules for Life"
-    data-description="12 Rules for Life is a poster design project that reimagines 12 Rules for Life by Jordan Peterson as a fictional event. 
-    Through a series of posters, the project explores how conceptual themes can be translated into visual form and event identity."
-    data-link="project3.html">
+    data-description="12 Rules for Life is a poster design project that reimagines 12 Rules for Life by Jordan Peterson as a fictional event. Through a series of posters, the project explores how conceptual themes can be translated into visual form and event identity."
+    data-link=""
+    data-image="../imgs/background03.webp">
 
-    <img src="../imgs/background03.webp" alt="">
+    <img src="../imgs/background03.webp" alt="12 Rules for Life poster series design">
   </div>
 
   <!-- Solar -->
   <div class="project-card"
     data-category="Poster"
     data-title="Solar System"
-    data-description="Solar System is an infographic poster design that visualizes information about the solar system and its planets. 
-    Using a network of lines to represent planetary distance and movement, the project transforms scientific information into a clear and engaging visual system."
-    data-link="project6.html">
+    data-description="Solar System is an infographic poster design that visualizes information about the solar system and its planets. Using a network of lines to represent planetary distance and movement, the project transforms scientific information into a clear and engaging visual system."
+    data-link=""
+    data-image="../imgs/background06.webp">
 
-    <img src="../imgs/background06.webp" alt="">
+    <img src="../imgs/background06.webp" alt="Solar System infographic poster design">
   </div>
 
   <!-- Curvo -->
   <div class="project-card"
     data-category="Typeface"
     data-title="Curvo 2"
-    data-description="Curvo 2 is a typeface designed around the geometry of a squircle—a form that sits between a square and a circle. This hybrid shape gives the typeface its distinctive balance of structure and softness. 
-    The name “Curvo” is derived from the curved edges that define each character, where sharp corners are replaced with smooth, continuous curves. This design approach creates a more approachable and visually comfortable reading experience, while still maintaining a clear and intentional form."
-    data-link="project8.html">
+    data-description="Curvo 2 is a typeface designed around the geometry of a squircle, a form that sits between a square and a circle. This hybrid shape gives the typeface its distinctive balance of structure and softness. The name Curvo is derived from the curved edges that define each character, where sharp corners are replaced with smooth, continuous curves."
+    data-link=""
+    data-image="../imgs/photo9.webp">
 
-    <img src="../imgs/photo9.webp" alt="">
+    <img src="../imgs/photo9.webp" alt="Curvo 2 typeface specimen">
   </div>
 
-  <!-- Movable Type Placeholder -->
+  <!-- Movable Type -->
   <div class="project-card"
     data-category="Typeface"
     data-title="Movable Type"
-    data-description="Curvo2 Movable Type is a physical extension of the typeface Curvo2, 
-    translating digital letterforms into resin 3D-printed movable type. Designed through Blender and fabricated using Lychee Slicer, the project consists of 40 characters, including alphabets, numbers, and punctuation."
-    data-link="project8.html">
+    data-description="Curvo2 Movable Type is a physical extension of the typeface Curvo2, translating digital letterforms into resin 3D-printed movable type. Designed through Blender and fabricated using Lychee Slicer, the project consists of 40 characters, including alphabets, numbers, and punctuation."
+    data-link=""
+    data-image="../imgs/photo11.webp">
 
-    <img src="../imgs/photo11.webp" alt="">
-
-    
+    <img src="../imgs/photo11.webp" alt="Curvo 2 resin 3D-printed movable type">
   </div>
 
   <!-- StoryType -->
   <div class="project-card"
     data-category="System"
     data-title="StoryType"
-    data-description="StoryType is a plugin concept designed to make typography a more intuitive part of writing. 
-    Through AI-powered typeface recommendations and real-time font previews, the project allows users to explore how typography can shape mood, meaning, and emotional expression while writing."
-    data-link="project8.html">
+    data-description="StoryType is a plugin concept designed to make typography a more intuitive part of writing. Through AI-powered typeface recommendations and real-time font previews, the project allows users to explore how typography can shape mood, meaning, and emotional expression while writing."
+    data-link=""
+    data-image="../imgs/photo10.webp">
 
-    <img src="../imgs/photo10.webp" alt="">
-   </div>
-
-    <!-- StoryType -->
-    <div class="project-card"
-    data-category="Cmapaign"
-    data-title="Recipt? Rethink!"
-    data-description="Receipt? Rethink! is a campaign project encouraging audiences to reconsider the everyday use of receipt paper. Through infographic-driven poster designs, the project visualizes the environmental and material costs of production, including BPA, tree usage, and water consumption."
-    data-link="project3.html">
-
-    <img src="../imgs/photo3.webp" alt="">
+    <img src="../imgs/photo10.webp" alt="StoryType AI typography plugin concept">
   </div>
 
-  <!-- Playing Card Placeholder -->
+  <!-- Receipt? Rethink! -->
+  <div class="project-card"
+    data-category="Campaign"
+    data-title="Receipt? Rethink!"
+    data-description="Receipt? Rethink! is a campaign project encouraging audiences to reconsider the everyday use of receipt paper. Through infographic-driven poster designs, the project visualizes the environmental and material costs of production, including BPA, tree usage, and water consumption."
+    data-link=""
+    data-image="../imgs/photo3.webp">
+
+    <img src="../imgs/photo3.webp" alt="Receipt? Rethink! environmental campaign posters">
+  </div>
+
+  <!-- Playing Card -->
   <div class="project-card"
     data-category="Objects"
     data-title="Playing Card (Curvo 2)"
-    data-description="Curvo2 Playing Cards is a playing card design project based on the custom typeface Curvo2. 
-    By extending the typeface into a graphic system, the project reimagines traditional card symbols and layouts through the distinct visual language of Curvo2."
-    data-link="project8.html">
+    data-description="Curvo2 Playing Cards is a playing card design project based on the custom typeface Curvo2. By extending the typeface into a graphic system, the project reimagines traditional card symbols and layouts through the distinct visual language of Curvo2."
+    data-link=""
+    data-image="../imgs/photo6.webp">
 
-    <img src="../imgs/photo6.webp" alt="">
+    <img src="../imgs/photo6.webp" alt="Curvo 2 playing card design">
   </div>
 
-  <!-- Exhibition Placeholder -->
+  <!-- Exhibition -->
   <div class="project-card"
     data-category="Exhibition"
     data-title="zZ’ihň dd’-ah sé’Ki"
-    data-description="“zZ’ihň dd’-ah sé’Ki” is a collaborative video art project created for the CalArts Expo exhibition with the artist Soohyun Park and Horim Kim. 
-    Through moving image and experimental narrative, the work explores anxiety and the thoughts shaped by emotional instability and psychological tension."
-    data-link="project8.html">
+    data-description="zZ’ihn dd’-ah se’Ki is a collaborative video art project created for the CalArts Expo exhibition with the artist Soohyun Park and Horim Kim. Through moving image and experimental narrative, the work explores anxiety and the thoughts shaped by emotional instability and psychological tension."
+    data-link=""
+    data-image="../imgs/photo5.webp">
 
-    <img src="../imgs/photo5.webp" alt="">
+    <img src="../imgs/photo5.webp" alt="zZ’ihň dd’-ah sé’Ki collaborative video art installation">
   </div>
 
   <!-- Typeface Archive -->
   <div class="project-card"
     data-category="Archive"
     data-title="Typeface Archive"
-    data-description="Typeface Archive is an ongoing archival project dedicated to documenting one typeface each day. 
-    Combining specimen design, historical research, and visual experimentation, each post translates the character of a typeface into a composition informed by its unique formal and stylistic qualities."
-    data-link="https://instagram.com/typeface.archive">
+    data-description="Typeface Archive is an ongoing archival project dedicated to documenting one typeface each day. Combining specimen design, historical research, and visual experimentation, each post translates the character of a typeface into a composition informed by its unique formal and stylistic qualities."
+    data-link="https://instagram.com/typeface.archive"
+    data-image="../imgs/photo8.webp">
 
-    <img src="../imgs/photo8.webp" alt="">
+    <img src="../imgs/photo8.webp" alt="Typeface Archive daily typeface documentation">
   </div>
 
   <!-- Are.na -->
   <div class="project-card"
     data-category="Archive"
     data-title="Are.na"
-    data-description=""
-    data-link="https://www.are.na/minsung-cho/channels">
+    data-description="A curated collection of visual references, research, and inspiration organized across multiple channels on Are.na."
+    data-link="https://www.are.na/minsung-cho/channels"
+    data-image="../imgs/photo4.webp">
 
-    <img src="../imgs/photo4.webp" alt="">
+    <img src="../imgs/photo4.webp" alt="Are.na visual reference collection">
   </div>
 
 </div>
@@ -597,19 +661,37 @@ body{
       ×
     </button>
 
-    <div class="popup-category" id="popupCategory"></div>
+    <div class="popup-carousel" id="popupCarousel">
+      <img id="popupImage" src="" alt="">
+    </div>
 
-    <h1 class="popup-title" id="popupTitle"></h1>
+    <div class="popup-body">
 
-    <p class="popup-description" id="popupDescription"></p>
+      <h1 class="popup-title" id="popupTitle"></h1>
 
-    <a
-      class="popup-link"
-      id="popupLink"
-      href="#"
-      target="_blank">
-      Visit Project →
-    </a>
+      <div class="popup-category" id="popupCategory"></div>
+
+      <p class="popup-description" id="popupDescription"></p>
+
+      <div class="popup-actions">
+
+        <a
+          class="popup-contact-link"
+          href="../contact/index.html">
+          Contact for Detailed Portfolio →
+        </a>
+
+        <a
+          class="popup-link"
+          id="popupLink"
+          href="#"
+          target="_blank">
+          Visit Website →
+        </a>
+
+      </div>
+
+    </div>
 
   </div>
 
@@ -651,6 +733,9 @@ document.getElementById("popupDescription");
 const popupLink =
 document.getElementById("popupLink");
 
+const popupImage =
+document.getElementById("popupImage");
+
 const closePopup =
 document.getElementById("closePopup");
 
@@ -670,8 +755,18 @@ document.querySelectorAll(".project-card")
     popupDescription.textContent =
       card.dataset.description;
 
-    popupLink.href =
-      card.dataset.link;
+    popupImage.src =
+      card.dataset.image;
+
+    popupImage.alt =
+      card.dataset.title;
+
+    if(card.dataset.link){
+      popupLink.href = card.dataset.link;
+      popupLink.style.display = "inline-flex";
+    } else {
+      popupLink.style.display = "none";
+    }
 
     popupOverlay.classList.add("active");
   });

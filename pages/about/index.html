@@ -238,33 +238,40 @@ ABOUT
 }
 
 /* -------- MOBILE -------- */
-@media (max-width: 600px) {
+@media (max-width: 768px) {
 
   .container {
-    margin: 80px auto;
+    padding: 80px 24px 60px;
   }
 
   h1 {
-    font-size: 16px;
+    font-size: clamp(32px, 10vw, 48px);
     margin-bottom: 40px;
   }
 
-  .about-text {
-    font-size: 18px;
-    line-height: 1.6;
-    max-width: 320px;
-
-    text-align: left; /* 🔥 key fix */
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
   }
 
-  .hamburger {
-    width: 28px;
-    height: 22px;
+  .profile-placeholder {
+    width: 160px;
+  }
+
+  .about-text {
+    font-size: 17px;
+    line-height: 1.6;
+    max-width: 100%;
+  }
+
+  .menu-trigger {
+    top: 24px;
+    right: 24px;
   }
 
   .menu {
-    top: 60px;
-    right: 15px;
+    top: 52px;
+    right: 24px;
   }
 }
 </style>
