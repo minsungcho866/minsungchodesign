@@ -72,42 +72,58 @@ h1{
   right:32px;
 
   display:flex;
-  gap:16px;
+  gap:12px;
 
   z-index:100;
 }
+
 .top-nav a{
-  background:black;
-  color:white;
+  background:transparent;
+  color:#111;
   text-decoration:none;
 
-  /* shorter height */
-  padding:9px 18px;
+  padding:8px 18px;
 
   border-radius:999px;
 
-  /* typography */
   font-family:
     "Helvetica Neue",
     Helvetica,
     Arial,
     sans-serif;
 
-  font-size:18px;
-  font-weight:500; /* medium */
+  font-size:14px;
+  font-weight:500;
 
-  border:0.5px solid transparent;
+  border:1px solid #111;
 
   transition:
     color .25s ease,
-    border-color .25s ease;
+    background .25s ease;
 }
 
 .top-nav a:hover{
-  background:transparent;
-  color:black;
-  border-color:black;
+  background:#111;
+  color:#fff;
 }
+
+/* TAGLINE */
+
+.tagline{
+  position:fixed;
+  bottom:32px;
+  left:36px;
+  right:36px;
+
+  font-size:clamp(11px, 1.3vw, 15px);
+  font-weight:500;
+  line-height:1.4;
+  color:#111;
+
+  z-index:100;
+  pointer-events:none;
+}
+
 /* CANVAS */
 
 canvas{
@@ -138,9 +154,17 @@ canvas{
   }
 
   .top-nav a{
-    padding:10px 16px;
-    font-size:13px;
+    padding:8px 14px;
+    font-size:12px;
     white-space:nowrap;
+  }
+
+  .tagline{
+    bottom:auto;
+    top:24px;
+    left:18px;
+    right:18px;
+    font-size:12px;
   }
 }
 
@@ -156,6 +180,9 @@ canvas{
 
 <!-- TITLE -->
 <h1>MINSUNG</h1>
+
+<!-- TAGLINE -->
+<p class="tagline">A collection of observations about people, systems, and the things we choose to spend time on. Some turn into projects, some don't.</p>
 
 <!-- NAV -->
 <nav class="top-nav">
