@@ -8,132 +8,81 @@
 <link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
 
 <style>
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
 
-  background:#f8f8f6;
+  background:#e9e9e9;
   color:#111;
 
   font-family:Arial, Helvetica, sans-serif;
-}
 
-/* Layout */
-
-/* -------------------
-LAYOUT
-------------------- */
-
-.container{
-  padding:
-    120px
-    40px
-    80px;
+  overflow:hidden;
 }
 
 /* -------------------
-TITLE
+HERO
 ------------------- */
 
-.page-label{
-  font-size:12px;
+.hero-about{
+  position:fixed;
+  left:18px;
+  right:40px;
+  top:50%;
 
-  letter-spacing:.14em;
-  text-transform:uppercase;
+  transform:translateY(-55%);
 
-  color:#777;
+  display:flex;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  gap:64px;
 
-  margin-bottom:12px;
+  z-index:10;
 }
 
 h1{
-  font-size:clamp(48px,8vw,120px);
+  margin:0;
 
-  line-height:.92;
+  font-size:11vw;
+  line-height:.88;
+  font-weight:900;
+  letter-spacing:-0.08em;
 
-  font-weight:300;
+  flex-shrink:0;
 
-  margin:0 0 80px;
+  pointer-events:none;
 }
+
 /* -------------------
-ABOUT
+ABOUT TEXT
 ------------------- */
-.about-sidebar{
+
+.about-right{
   display:flex;
   flex-direction:column;
-  gap:24px;
+  gap:22px;
+
+  max-width:520px;
+
+  padding-top:12px;
 }
 
-.profile-placeholder{
-  width:220px;
-  aspect-ratio:4/5;
+.about-panel{
+  background:transparent;
 
-  border-radius:12px;
-
-  background:white;
-
-  border:1px solid rgba(0,0,0,.06);
-
-  box-shadow:
-    0 2px 6px rgba(0,0,0,.04),
-    0 8px 16px rgba(0,0,0,.04);
-
-  display:flex;
-  align-items:center;
-  justify-content:center;
-
-  font-size:12px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-
-  color:#999;
+  padding:0;
 }
 
-.profile-placeholder img{
-  width:100%;
-  height:100%;
-  object-fit:cover;
-  display:block;
-  border-radius:12px;
-}
-
-.about-grid{
-  display:grid;
-
-  grid-template-columns:
-    260px
-    minmax(420px, 560px);
-
-  gap:72px;
-
-  align-items:start;
-}
-
-.about-name{
-  font-size:16px;
-  color:#111;
-}
-
-.about-meta{
-  margin-top:12px;
-
-  font-size:13px;
-
-  line-height:1.7;
-
-  color:#777;
-}
 .about-text{
-  max-width:480px;
-  font-size:22px;
+  margin:0;
 
-  line-height:1.65;
+  font-size:clamp(14px, 1.36vw, 18px);
+  line-height:1.55;
 
   color:#666;
-}
-
-.about-text br{
-  display:block;
-  margin-bottom:12px;
 }
 
 .about-text span{
@@ -144,31 +93,72 @@ ABOUT
     color .2s ease;
 }
 
-.menu-trigger{
-  position:fixed;
-  top:32px;
-  right:40px;
+.resume-link{
+  align-self:flex-start;
 
-  z-index:9999;
+  display:inline-block;
 
-  font-size:12px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-
-  cursor:pointer;
+  text-decoration:none;
   color:#111;
 
-  transition:.2s ease;
+  border:1px solid #111;
+  border-radius:999px;
+
+  padding:8px 20px;
+
+  font-size:10px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+
+  transition:
+    background .25s ease,
+    color .25s ease;
 }
 
-.menu-trigger:hover{
-  opacity:.5;
+.resume-link:hover{
+  background:#111;
+  color:#fff;
+}
+
+/* -------------------
+HAMBURGER
+------------------- */
+
+.menu-trigger{
+  position:fixed;
+  top:28px;
+  right:32px;
+
+  width:34px;
+  height:22px;
+
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+
+  cursor:pointer;
+
+  z-index:9999;
+}
+
+.menu-trigger span{
+  display:block;
+  height:3px;
+
+  background:#111;
+  border-radius:2px;
+
+  transition:opacity .2s ease;
+}
+
+.menu-trigger:hover span{
+  opacity:.6;
 }
 
 .menu{
   position:fixed;
   top:60px;
-  right:40px;
+  right:32px;
 
   display:flex;
   flex-direction:column;
@@ -215,63 +205,40 @@ ABOUT
   opacity:.45;
 }
 
-.resume-link{
-  display:inline-block;
-
-  margin-top:20px;
-
-  text-decoration:none;
-
-  font-size:13px;
-
-  letter-spacing:.08em;
-
-  text-transform:uppercase;
-
-  color:#111;
-
-  transition:.2s ease;
-}
-
-.resume-link:hover{
-  opacity:.45;
-}
-
 /* -------- MOBILE -------- */
 @media (max-width: 768px) {
 
-  .container {
-    padding: 80px 24px 60px;
+  .hero-about{
+    position:static;
+    transform:none;
+
+    flex-direction:column;
+
+    padding:100px 24px 60px;
+    gap:32px;
   }
 
-  h1 {
-    font-size: clamp(32px, 10vw, 48px);
-    margin-bottom: 40px;
+  h1{
+    font-size:20vw;
   }
 
-  .about-grid {
-    grid-template-columns: 1fr;
-    gap: 36px;
+  .about-right{
+    max-width:100%;
+    padding-top:0;
   }
 
-  .profile-placeholder {
-    width: 160px;
+  .menu-trigger{
+    top:24px;
+    right:24px;
   }
 
-  .about-text {
-    font-size: 17px;
-    line-height: 1.6;
-    max-width: 100%;
+  .menu{
+    top:52px;
+    right:24px;
   }
 
-  .menu-trigger {
-    top: 24px;
-    right: 24px;
-  }
-
-  .menu {
-    top: 52px;
-    right: 24px;
+  body{
+    overflow:auto;
   }
 }
 </style>
@@ -281,7 +248,9 @@ ABOUT
 
 <!-- Hamburger -->
 <div class="menu-trigger" id="hamburger">
-  MENU
+  <span></span>
+  <span></span>
+  <span></span>
 </div>
 
 <!-- Menu -->
@@ -292,52 +261,27 @@ ABOUT
 </div>
 
 <!-- Content -->
-<div class="container">
+<div class="hero-about">
 
-  <div class="page-label">
-    About
-  </div>
-  <div class="about-grid">
+  <h1>MINSUNG</h1>
 
-    <div class="about-sidebar">
-  
-      <div class="profile-placeholder">
-        <img src="" alt="">
-      </div>
-  
-      <div class="about-name">
-        Minsung Cho
-  
-        <div class="about-meta">
-          Designer<br>
-          NYC / Seoul
-        </div>
-    
-        <a
-          class="resume-link"
-          href="resume.pdf"
-          target="_blank">
-          Resume ↗
-        </a>
-    
-      </div>
-  
+  <div class="about-right">
+
+    <div class="about-panel">
+      <p class="about-text" id="aboutText">Designer based in NYC / Seoul. Focused on graphic design, type design, interactive media, and visual systems. Currently studying Communication Design at Parsons School of Design. Previously served in the ROK Army as a driver and interpreter.</p>
     </div>
-  
-    <div class="about-text" id="aboutText">
-  Designer based in NYC / Seoul.
-  
-  Focused on graphic design,
-  type design, interactive media,
-  and visual systems.
-  
-  Currently studying Communication Design
-  at Parsons School of Design.
-  
-  Previously served in the ROK Army as a driver and interpreter.
-    </div>
-  
+
+    <a
+      class="resume-link"
+      href="resume.pdf"
+      target="_blank">
+      Resume ↗
+    </a>
+
   </div>
+
+</div>
+
 <script>
 /* Hamburger */
 const hamburger = document.getElementById("hamburger");
@@ -350,12 +294,10 @@ hamburger.onclick = () => {
 
 /* -------- Proximity Text -------- */
 const text = document.getElementById("aboutText");
-const letters = text.innerText.split("");
+const words = text.innerText.split(" ");
 
-text.innerHTML = letters.map(letter => {
-  if (letter === "\n") return "<br>";
-  if (letter === " ") return " ";
-  return `<span>${letter}</span>`;
+text.innerHTML = words.map(word => {
+  return word.split("").map(letter => `<span>${letter}</span>`).join("") + " ";
 }).join("");
 
 const spans = text.querySelectorAll("span");

@@ -21,13 +21,21 @@ body{
   overflow:hidden;
 }
 
-/* TITLE */
+/* HERO (TITLE + NAV) */
+
+.hero{
+  position:fixed;
+  left:18px;
+  top:50%;
+
+  transform:translateY(-58%);
+
+  z-index:10;
+
+  max-width:68vw;
+}
 
 h1{
-  position:absolute;
-  top:12px;
-  left:18px;
-
   margin:0;
 
   font-size:11vw;
@@ -35,7 +43,6 @@ h1{
   font-weight:900;
   letter-spacing:-0.08em;
 
-  z-index:10;
   pointer-events:none;
 }
 
@@ -67,24 +74,21 @@ h1{
 /* TOP NAV */
 
 .top-nav{
-  position:fixed;
-  top:28px;
-  right:32px;
+  margin-top:1.6vw;
+
+  width:100%;
 
   display:flex;
-  gap:12px;
+  align-items:center;
+  justify-content:center;
+  gap:32px;
 
   z-index:100;
 }
 
 .top-nav a{
-  background:transparent;
   color:#111;
   text-decoration:none;
-
-  padding:8px 18px;
-
-  border-radius:999px;
 
   font-family:
     "Helvetica Neue",
@@ -92,19 +96,19 @@ h1{
     Arial,
     sans-serif;
 
-  font-size:14px;
-  font-weight:500;
+  font-size:15px;
+  font-weight:300;
 
-  border:1px solid #111;
-
-  transition:
-    color .25s ease,
-    background .25s ease;
+  transition:opacity .25s ease;
 }
 
 .top-nav a:hover{
-  background:#111;
-  color:#fff;
+  opacity:.5;
+}
+
+.top-nav .dot{
+  color:#111;
+  font-size:5px;
 }
 
 /* TAGLINE */
@@ -115,7 +119,7 @@ h1{
   left:36px;
   right:36px;
 
-  font-size:clamp(11px, 1.3vw, 15px);
+  font-size:clamp(10px, 1.17vw, 13.5px);
   font-weight:500;
   line-height:1.4;
   color:#111;
@@ -136,34 +140,27 @@ canvas{
 
 @media(max-width:768px){
 
+  .hero{
+    top:20px;
+    transform:none;
+    max-width:90vw;
+  }
+
   h1{
     font-size:20vw;
-    top:20px;
-    left:18px;
   }
 
   .top-nav{
-    top:auto;
-    bottom:28px;
-    left:0;
-    right:0;
-    transform:none;
+    margin-top:10px;
     gap:8px;
-    flex-wrap:nowrap;
-    justify-content:center;
   }
 
   .top-nav a{
-    padding:8px 14px;
-    font-size:12px;
+    font-size:13px;
     white-space:nowrap;
   }
 
   .tagline{
-    bottom:auto;
-    top:24px;
-    left:18px;
-    right:18px;
     font-size:12px;
   }
 }
@@ -178,18 +175,23 @@ canvas{
   <div id="intro-text"></div>
 </div>
 
-<!-- TITLE -->
-<h1>MINSUNG</h1>
+<!-- HERO -->
+<div class="hero">
+
+  <h1>MINSUNG</h1>
+
+  <nav class="top-nav">
+    <a href="pages/about/index.html">About</a>
+    <span class="dot">•</span>
+    <a href="pages/projects/index.html">Projects</a>
+    <span class="dot">•</span>
+    <a href="pages/contact/index.html">Contact</a>
+  </nav>
+
+</div>
 
 <!-- TAGLINE -->
 <p class="tagline">A collection of observations about people, systems, and the things we choose to spend time on. Some turn into projects, some don't.</p>
-
-<!-- NAV -->
-<nav class="top-nav">
-  <a href="pages/about/index.html">About</a>
-  <a href="pages/projects/index.html">Projects</a>
-  <a href="pages/contact/index.html">Contact</a>
-</nav>
 
 <script type="module">
 
@@ -231,11 +233,9 @@ document.body.appendChild(
 
 /* GROUP */
 
-const group = new THREE.Group();
+const mainGroup = new THREE.Group();
 
-group.position.y = -0.2;
-
-scene.add(group);
+scene.add(mainGroup);
 
 /* SETTINGS */
 
@@ -252,10 +252,18 @@ const urls = [
   "pages/projects/index.html"
 ];
 
-const radius = 4.8;
-const baseWidth = 3.2;
+const radius = 4.6;
+const baseWidth = 4;
 const baseHeight = baseWidth * 0.65;
+const perRow = 4;
 
+const rowSettings = [
+  { y: 4.7, speed: 0.0016, phase: 0 },
+  { y: 0, speed: -0.0022, phase: 1.4 },
+  { y: -4.7, speed: 0.0019, phase: 2.7 }
+];
+
+const rowGroups = [];
 const objects = [];
 
 /* ROUNDED TEXTURE */
@@ -305,61 +313,80 @@ function createTexture(img){
   return new THREE.CanvasTexture(canvas);
 }
 
-/* CREATE CAROUSEL */
+/* CREATE ROWS */
 
-images.forEach((src,i)=>{
+rowSettings.forEach(row=>{
 
-  const angle =
-    (i / images.length)
-    * Math.PI * 2;
+  const rowGroup = new THREE.Group();
 
-  const x =
-    Math.cos(angle)
-    * radius;
+  rowGroup.position.y = row.y;
 
-  const z =
-    Math.sin(angle)
-    * radius;
+  rowGroup.rotation.y = row.phase;
 
-  const geometry =
-    new THREE.PlaneGeometry(
-      baseWidth,
-      baseHeight
-    );
+  mainGroup.add(rowGroup);
 
-  const material =
-    new THREE.MeshBasicMaterial({
-      color:0xffffff,
-      side:THREE.DoubleSide,
-      transparent:true,
-      depthWrite:false
-    });
+  rowGroups.push({
+    group: rowGroup,
+    speed: row.speed
+  });
 
-  const plane =
-    new THREE.Mesh(
-      geometry,
-      material
-    );
+  const ringImages =
+    images.slice(0, perRow);
 
-  plane.position.set(x,0,z);
+  ringImages.forEach((src,i)=>{
 
-  plane.lookAt(0,0,0);
+    const angle =
+      (i / ringImages.length)
+      * Math.PI * 2;
 
-  group.add(plane);
+    const x =
+      Math.cos(angle)
+      * radius;
 
-  objects.push(plane);
+    const z =
+      Math.sin(angle)
+      * radius;
 
-  const img = new Image();
-  img.src = src;
+    const geometry =
+      new THREE.PlaneGeometry(
+        baseWidth,
+        baseHeight
+      );
 
-  img.onload = ()=>{
+    const material =
+      new THREE.MeshBasicMaterial({
+        color:0xffffff,
+        side:THREE.DoubleSide,
+        transparent:true,
+        depthWrite:false
+      });
 
-    material.map =
-      createTexture(img);
+    const plane =
+      new THREE.Mesh(
+        geometry,
+        material
+      );
 
-    material.needsUpdate =
-      true;
-  };
+    plane.position.set(x,0,z);
+
+    plane.lookAt(0,0,0);
+
+    rowGroup.add(plane);
+
+    objects.push(plane);
+
+    const img = new Image();
+    img.src = src;
+
+    img.onload = ()=>{
+
+      material.map =
+        createTexture(img);
+
+      material.needsUpdate =
+        true;
+    };
+  });
 });
 
 /* RAYCAST */
@@ -474,6 +501,24 @@ e=>{
   }
 });
 
+/* LAYOUT */
+
+function layout(){
+
+  const isMobile =
+    innerWidth < 768;
+
+  mainGroup.position.x =
+    isMobile ? 1.44 : 6.84;
+
+  mainGroup.scale
+    .setScalar(
+      isMobile ? 0.5 : 1
+    );
+}
+
+layout();
+
 /* ANIMATION */
 
 function animate(){
@@ -482,8 +527,11 @@ function animate(){
     animate
   );
 
-  group.rotation.y +=
-    0.002;
+  rowGroups.forEach(row=>{
+
+    row.group.rotation.y +=
+      row.speed;
+  });
 
   renderer.render(
     scene,
@@ -511,6 +559,8 @@ window
     innerWidth,
     innerHeight
   );
+
+  layout();
 });
 
 /* INTRO */
