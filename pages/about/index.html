@@ -52,8 +52,17 @@ h1{
   letter-spacing:-0.08em;
 
   flex-shrink:0;
+}
 
-  pointer-events:none;
+.home-link{
+  color:inherit;
+  text-decoration:none;
+
+  transition:opacity .2s ease;
+}
+
+.home-link:hover{
+  opacity:.6;
 }
 
 /* -------------------
@@ -263,7 +272,7 @@ HAMBURGER
 <!-- Content -->
 <div class="hero-about">
 
-  <h1>MINSUNG</h1>
+  <h1><a href="../../index.html" class="home-link">MINSUNG</a></h1>
 
   <div class="about-right">
 

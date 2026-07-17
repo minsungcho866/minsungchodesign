@@ -21,10 +21,160 @@ body{
   overflow:hidden;
 }
 
+/* -----------------------
+   BACKSIDE FLIP
+----------------------- */
+
+.stage{
+  position:relative;
+  width:100%;
+  height:100vh;
+  perspective:2400px;
+}
+
+.flipper{
+  position:relative;
+  width:100%;
+  height:100%;
+  transform-style:preserve-3d;
+  transition:transform 1.1s cubic-bezier(.65,0,.35,1);
+  transform:rotateX(0deg);
+}
+
+.flipper.flipped{
+  transform:rotateX(-180deg);
+}
+
+.face{
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+}
+
+.face.front{
+  background:#e9e9e9;
+}
+
+.face.front.content-hidden{
+  visibility:hidden;
+}
+
+.face.back{
+  background:#0a0a0a;
+  color:#c9c6bd;
+
+  font-family:"ocr-a-std", monospace;
+  font-weight:400;
+  font-style:normal;
+
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:flex-start;
+  text-align:center;
+
+  padding:4rem 2rem 3rem;
+  overflow:auto;
+
+  transform:rotateX(180deg);
+}
+
+.back-title{
+  font-size:clamp(28px,5vw,48px);
+  font-weight:600;
+  letter-spacing:-.01em;
+  margin:0 0 36px;
+}
+
+.wip-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(180px,1fr));
+  gap:14px;
+  width:min(1100px,92vw);
+  padding:4px;
+  margin:0 0 8px;
+}
+
+.wip-card{
+  position:relative;
+  aspect-ratio:4/3;
+  border-radius:8px;
+  overflow:hidden;
+  background:#151513;
+}
+
+.wip-card img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+
+  filter:grayscale(10%);
+
+  transition:
+    transform .5s ease,
+    filter .3s ease;
+}
+
+.wip-card:hover img{
+  transform:scale(1.05);
+  filter:grayscale(0%);
+}
+
+.wip-card-label{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+
+  padding:18px 12px 10px;
+
+  background:linear-gradient(to top, rgba(0,0,0,.8), transparent);
+
+  font-size:10.5px;
+  letter-spacing:.06em;
+  text-transform:uppercase;
+  color:#e8e6e0;
+
+  pointer-events:none;
+}
+
+.flip-toggle{
+  position:fixed;
+  top:26px;
+  left:28px;
+
+  z-index:500;
+
+  appearance:none;
+  border:1px solid rgba(17,17,17,.4);
+  background:transparent;
+  color:#111;
+
+  font-size:11px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+
+  padding:7px 14px;
+  border-radius:999px;
+  cursor:pointer;
+
+  transition:opacity .2s ease, color .3s ease, border-color .3s ease;
+}
+
+.flip-toggle:hover{
+  opacity:.6;
+}
+
+.flip-toggle.is-back{
+  border-color:rgba(201,198,189,.5);
+  color:#c9c6bd;
+}
+
 /* HERO (TITLE + NAV) */
 
 .hero{
-  position:fixed;
+  position:absolute;
   left:18px;
   top:50%;
 
@@ -114,7 +264,7 @@ h1{
 /* TAGLINE */
 
 .tagline{
-  position:fixed;
+  position:absolute;
   bottom:32px;
   left:36px;
   right:36px;
@@ -163,6 +313,18 @@ canvas{
   .tagline{
     font-size:12px;
   }
+
+  .flip-toggle{
+    top:50%;
+    left:18px;
+    transform:translateY(-50%);
+    padding:6px 12px;
+    font-size:10px;
+  }
+
+  .wip-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
 }
 
 </style>
@@ -175,23 +337,103 @@ canvas{
   <div id="intro-text"></div>
 </div>
 
-<!-- HERO -->
-<div class="hero">
+<!-- BACKSIDE TOGGLE -->
+<button class="flip-toggle" id="flipToggle" aria-label="Toggle backside">
+  <span id="flipToggleLabel">The Back of My Mind</span>
+</button>
 
-  <h1>MINSUNG</h1>
+<div class="stage">
+  <div class="flipper" id="flipper">
 
-  <nav class="top-nav">
-    <a href="pages/about/index.html">About</a>
-    <span class="dot">•</span>
-    <a href="pages/projects/index.html">Projects</a>
-    <span class="dot">•</span>
-    <a href="pages/contact/index.html">Contact</a>
-  </nav>
+    <!-- FRONT -->
+    <div class="face front" id="frontFace">
 
+      <!-- HERO -->
+      <div class="hero">
+
+        <h1>MINSUNG</h1>
+
+        <nav class="top-nav">
+          <a href="pages/about/index.html">About</a>
+          <span class="dot">•</span>
+          <a href="pages/projects/index.html">Projects</a>
+          <span class="dot">•</span>
+          <a href="pages/contact/index.html">Contact</a>
+        </nav>
+
+      </div>
+
+      <!-- TAGLINE -->
+      <p class="tagline">A collection of observations about people, systems, and the things we choose to spend time on. Some turn into projects, some don't.</p>
+
+    </div>
+
+    <!-- BACK -->
+    <div class="face back" id="backFace">
+      <h2 class="back-title">Works in Progress</h2>
+
+      <div class="wip-grid">
+
+        <div class="wip-card">
+          <img src="imgs/back-web/kinetic-time-orbiter.jpg" alt="Kinetic Time Orbiter">
+          <span class="wip-card-label">Kinetic Time Orbiter</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/lifespan-market.jpg" alt="Lifespan Market">
+          <span class="wip-card-label">Lifespan Market</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/natural-dye-zine.jpg" alt="Natural Dye Zine">
+          <span class="wip-card-label">Natural Dye Zine</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/afrofuturism.jpg" alt="Afrofuturism">
+          <span class="wip-card-label">Afrofuturism</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/initium.jpg" alt="Initium">
+          <span class="wip-card-label">Initium</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/allnp.jpg" alt="ALLNP">
+          <span class="wip-card-label">ALLNP</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/billboard-mock.jpg" alt="Hitchcock Retrospective billboard">
+          <span class="wip-card-label">Hitchcock Retrospective</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/maya.jpg" alt="The Maya Principle">
+          <span class="wip-card-label">The Maya Principle</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/movement.jpg" alt="Movement Basketball Academy">
+          <span class="wip-card-label">Movement Basketball Academy</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/poetica.jpg" alt="Poetica">
+          <span class="wip-card-label">Poetica</span>
+        </div>
+
+        <div class="wip-card">
+          <img src="imgs/back-web/12-rules-for-life.jpg" alt="12 Rules for Life, alternate poster">
+          <span class="wip-card-label">12 Rules for Life</span>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </div>
-
-<!-- TAGLINE -->
-<p class="tagline">A collection of observations about people, systems, and the things we choose to spend time on. Some turn into projects, some don't.</p>
 
 <script type="module">
 
@@ -227,7 +469,9 @@ renderer.setPixelRatio(
   Math.min(devicePixelRatio,1.5)
 );
 
-document.body.appendChild(
+document.getElementById(
+  "frontFace"
+).appendChild(
   renderer.domElement
 );
 
@@ -681,6 +925,70 @@ function animateIntro(){
 }
 
 animateIntro();
+
+/* BACKSIDE FLIP */
+
+const flipper =
+document.getElementById(
+  "flipper"
+);
+
+const flipToggle =
+document.getElementById(
+  "flipToggle"
+);
+
+const flipToggleLabel =
+document.getElementById(
+  "flipToggleLabel"
+);
+
+const frontFace =
+document.getElementById(
+  "frontFace"
+);
+
+let isBack = false;
+
+flipToggle
+.addEventListener(
+"click",
+()=>{
+
+  isBack = !isBack;
+
+  flipper.classList
+    .toggle(
+      "flipped",
+      isBack
+    );
+
+  flipToggle.classList
+    .toggle(
+      "is-back",
+      isBack
+    );
+
+  const nextLabel =
+    isBack ?
+      "Front" :
+      "The Back of My Mind";
+
+  window.setTimeout(
+  ()=>{
+    flipToggleLabel
+      .textContent =
+      nextLabel;
+
+    frontFace.classList
+      .toggle(
+        "content-hidden",
+        isBack
+      );
+  },
+  550
+  );
+});
 
 </script>
 

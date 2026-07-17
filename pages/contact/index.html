@@ -42,6 +42,33 @@ MENU
 .menu-trigger:hover{
   opacity:.5;
 }
+
+/* -------------------
+HOME LOGO
+------------------- */
+
+.home-logo{
+  position:fixed;
+  top:28px;
+  left:40px;
+
+  z-index:9999;
+
+  font-weight:900;
+  font-size:20px;
+  letter-spacing:-0.04em;
+
+  color:#111;
+  text-decoration:none;
+  line-height:1;
+
+  transition:opacity .2s ease;
+}
+
+.home-logo:hover{
+  opacity:.5;
+}
+
 .menu{
   position:fixed;
   top:60px;
@@ -217,11 +244,20 @@ MOBILE
     top: 52px;
     right: 24px;
   }
+
+  .home-logo {
+    top: 24px;
+    left: 24px;
+    font-size: 16px;
+  }
 }
 </style>
 </head>
 
 <body>
+
+<!-- Home Logo -->
+<a class="home-logo" href="../../index.html">MINSUNG</a>
 
 <!-- Hamburger -->
 <div class="menu-trigger" id="hamburger">
