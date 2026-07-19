@@ -214,6 +214,105 @@ HAMBURGER
   opacity:.45;
 }
 
+/* -------------------
+PASSWORD MODAL
+------------------- */
+
+.password-overlay{
+  position:fixed;
+  inset:0;
+
+  background:rgba(0,0,0,.4);
+
+  display:flex;
+  align-items:center;
+  justify-content:center;
+
+  opacity:0;
+  pointer-events:none;
+
+  transition:opacity .2s ease;
+
+  z-index:10000;
+}
+
+.password-overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.password-modal{
+  width:min(360px,86vw);
+
+  background:#f4f4f2;
+  border-radius:20px;
+
+  padding:32px 28px;
+
+  text-align:center;
+
+  box-shadow:0 20px 60px rgba(0,0,0,.25);
+
+  transform:translateY(8px);
+  transition:transform .2s ease;
+}
+
+.password-overlay.active .password-modal{
+  transform:translateY(0);
+}
+
+.password-label{
+  font-size:15px;
+  color:#111;
+  margin:0 0 18px;
+}
+
+.password-input{
+  width:100%;
+
+  padding:12px 18px;
+
+  border:1px solid #111;
+  border-radius:999px;
+
+  font-size:14px;
+  font-family:inherit;
+  color:#111;
+  background:transparent;
+
+  outline:none;
+
+  margin-bottom:20px;
+}
+
+.password-actions{
+  display:flex;
+  justify-content:center;
+  gap:14px;
+}
+
+.password-btn{
+  flex:1;
+
+  padding:10px 0;
+
+  border:1px solid #111;
+  border-radius:999px;
+  background:transparent;
+
+  font-size:14px;
+  font-family:inherit;
+  color:#111;
+  cursor:pointer;
+
+  transition:background .2s ease, color .2s ease;
+}
+
+.password-btn:hover{
+  background:#111;
+  color:#fff;
+}
+
 /* -------- MOBILE -------- */
 @media (max-width: 768px) {
 
@@ -282,6 +381,7 @@ HAMBURGER
 
     <a
       class="resume-link"
+      id="resumeLink"
       href="resume.pdf"
       target="_blank">
       Resume ↗
@@ -289,6 +389,22 @@ HAMBURGER
 
   </div>
 
+</div>
+
+<!-- Password Modal -->
+<div class="password-overlay" id="passwordOverlay">
+  <div class="password-modal">
+    <p class="password-label">Enter password to view resume:</p>
+    <input
+      type="password"
+      class="password-input"
+      id="passwordInput"
+      autocomplete="off">
+    <div class="password-actions">
+      <button class="password-btn" id="passwordCancel">Cancel</button>
+      <button class="password-btn" id="passwordOk">OK</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -300,6 +416,57 @@ hamburger.onclick = () => {
   hamburger.classList.toggle("active");
   menu.classList.toggle("show");
 };
+
+/* -------- Resume Password Gate -------- */
+const resumeLink = document.getElementById("resumeLink");
+const passwordOverlay = document.getElementById("passwordOverlay");
+const passwordInput = document.getElementById("passwordInput");
+const passwordCancel = document.getElementById("passwordCancel");
+const passwordOk = document.getElementById("passwordOk");
+
+function openPasswordModal(){
+  passwordInput.value = "";
+  passwordOverlay.classList.add("active");
+  passwordInput.focus();
+}
+
+function closePasswordModal(){
+  passwordOverlay.classList.remove("active");
+}
+
+resumeLink.addEventListener("click", (e) => {
+  e.preventDefault();
+  openPasswordModal();
+});
+
+passwordCancel.addEventListener("click", closePasswordModal);
+
+passwordOk.addEventListener("click", () => {
+  if (passwordInput.value === "1005") {
+    closePasswordModal();
+    window.open(resumeLink.href, "_blank");
+  } else {
+    alert("Incorrect password.");
+  }
+});
+
+passwordInput.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    passwordOk.click();
+  }
+});
+
+passwordOverlay.addEventListener("click", (e) => {
+  if (e.target === passwordOverlay) {
+    closePasswordModal();
+  }
+});
+
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape") {
+    closePasswordModal();
+  }
+});
 
 /* -------- Proximity Text -------- */
 const text = document.getElementById("aboutText");

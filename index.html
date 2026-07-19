@@ -82,6 +82,7 @@ body{
 }
 
 .back-hero{
+  position:relative;
   width:100vw;
   height:100%;
   flex-shrink:0;
@@ -104,82 +105,93 @@ body{
   margin:0 auto;
 }
 
+.scroll-hint{
+  position:absolute;
+  left:50%;
+  bottom:56px;
+  transform:translateX(-50%);
+
+  display:flex;
+  align-items:center;
+  gap:8px;
+
+  font-size:10px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  opacity:.45;
+}
+
+.scroll-hint-arrow{
+  display:inline-block;
+  animation:scrollHintNudge 1.4s ease-in-out infinite;
+}
+
+@keyframes scrollHintNudge{
+  0%,100%{ transform:translateX(0); }
+  50%{ transform:translateX(7px); }
+}
+
 .wip-grid{
   display:flex;
   flex-direction:row;
   align-items:center;
   height:100%;
-  gap:64px;
-  padding:0 10vw;
+  gap:140px;
+  padding:0 12vw;
 }
 
 .wip-card{
-  position:relative;
   flex:0 0 auto;
-  width:min(64vw,760px);
-  height:min(64vh,560px);
-  border-radius:8px;
-  overflow:hidden;
-  background:#151513;
+  width:min(34vw,400px);
 
-  box-shadow:0 10px 24px rgba(0,0,0,.5);
+  display:flex;
+  flex-direction:column;
+  gap:26px;
 
   scroll-snap-align:center;
-
-  transition:transform .3s ease, z-index 0s;
 }
 
-.wip-card:nth-child(1){ transform:rotate(-3deg) translateY(8px); }
-.wip-card:nth-child(2){ transform:rotate(2deg) translateY(-10px); }
-.wip-card:nth-child(3){ transform:rotate(-2deg) translateY(4px); }
-.wip-card:nth-child(4){ transform:rotate(3.5deg) translateY(-6px); }
-.wip-card:nth-child(5){ transform:rotate(-4deg) translateY(12px); }
-.wip-card:nth-child(6){ transform:rotate(1.5deg) translateY(-4px); }
-.wip-card:nth-child(7){ transform:rotate(-1.5deg) translateY(6px); }
-.wip-card:nth-child(8){ transform:rotate(3deg) translateY(-12px); }
-.wip-card:nth-child(9){ transform:rotate(-3deg) translateY(2px); }
-.wip-card:nth-child(10){ transform:rotate(2.5deg) translateY(-8px); }
-.wip-card:nth-child(11){ transform:rotate(-2.5deg) translateY(10px); }
-
-.wip-card:hover{
-  transform:rotate(0deg) translateY(0) scale(1.06);
-  z-index:5;
-}
-
-.wip-card img{
+.wip-card-image{
   width:100%;
-  height:100%;
-  object-fit:cover;
+
+  display:flex;
+  justify-content:center;
+}
+
+.wip-card-image img{
+  width:auto;
+  height:auto;
+  max-width:100%;
+  max-height:48vh;
   display:block;
 
-  filter:grayscale(10%);
-
-  transition:
-    transform .5s ease,
-    filter .3s ease;
+  filter:grayscale(15%);
 }
 
-.wip-card:hover img{
-  transform:scale(1.05);
-  filter:grayscale(0%);
+.wip-card-info{
+  text-align:left;
 }
 
-.wip-card-label{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-
-  padding:18px 12px 10px;
-
-  background:linear-gradient(to top, rgba(0,0,0,.8), transparent);
-
-  font-size:10.5px;
-  letter-spacing:.06em;
+.wip-card-title{
+  font-size:15px;
+  font-weight:600;
+  letter-spacing:.02em;
   text-transform:uppercase;
-  color:#e8e6e0;
+  margin:0 0 8px;
+}
 
-  pointer-events:none;
+.wip-card-year{
+  font-size:11px;
+  opacity:.5;
+  margin:0 0 16px;
+}
+
+.wip-card-desc{
+  font-size:11px;
+  line-height:1.7;
+  opacity:.7;
+  max-width:36ch;
+  margin:0;
 }
 
 .flip-toggle{
@@ -374,14 +386,17 @@ canvas{
     padding:0 1.2rem;
   }
 
+  .scroll-hint{
+    bottom:36px;
+  }
+
   .wip-grid{
-    gap:32px;
+    gap:64px;
     padding:0 12vw;
   }
 
   .wip-card{
-    width:80vw;
-    height:56vh;
+    width:76vw;
   }
 }
 
@@ -436,63 +451,90 @@ For an unshapen work is as raw grain.<br>
 <br>
 And that which is added by violence<br>
 bringeth forth neither beauty nor glory.</p>
+
+        <div class="scroll-hint">
+          <span>Scroll</span>
+          <span class="scroll-hint-arrow">&#8594;</span>
+        </div>
       </div>
 
       <div class="wip-grid">
 
         <div class="wip-card">
-          <img src="imgs/back-web/kinetic-time-orbiter.jpg" alt="Kinetic Time Orbiter">
-          <span class="wip-card-label">Kinetic Time Orbiter</span>
+          <div class="wip-card-image">
+            <img src="imgs/back-web/kinetic-time-orbiter.jpg" alt="Kinetic Time Orbiter">
+          </div>
+          <div class="wip-card-info">
+            <h3 class="wip-card-title">Kinetic Time Orbiter</h3>
+            <p class="wip-card-year">2026</p>
+            <p class="wip-card-desc">Visualizing time is different from simply seeing it. To perceive time in a single moment is to possess a kind of control over it. Rather than separating the hour and minute hands, this object proposes a clock in which the hour hand, the minute hand, and the clock itself exist as one.</p>
+          </div>
         </div>
 
         <div class="wip-card">
-          <img src="imgs/back-web/lifespan-market.jpg" alt="Lifespan Market">
-          <span class="wip-card-label">Lifespan Market</span>
+          <div class="wip-card-image">
+            <img src="imgs/back-web/lifespan-market.jpg" alt="Lifespan Market">
+          </div>
+          <div class="wip-card-info">
+            <h3 class="wip-card-title">Lifespan Market</h3>
+            <p class="wip-card-year">2026</p>
+            <p class="wip-card-desc">Every object reaches the end of its lifespan. However, determining that lifespan has never been within human control. Some objects may last one year, while others endure for five. But if that lifespan could be controlled, it would inevitably acquire a price. As long as human desire exists, such a market is unavoidable. Lifespan Market imagines a world where objects are sold with predetermined lifespans.</p>
+          </div>
         </div>
 
         <div class="wip-card">
-          <img src="imgs/back-web/natural-dye-zine.jpg" alt="Natural Dye Zine">
-          <span class="wip-card-label">Natural Dye Zine</span>
+          <div class="wip-card-image">
+            <img src="imgs/back-web/natural-dye-zine.jpg" alt="Natural Dye Zine">
+          </div>
+          <div class="wip-card-info">
+            <h3 class="wip-card-title">Natural Dye Zine</h3>
+            <p class="wip-card-year">2024</p>
+            <p class="wip-card-desc">The clearest way to distinguish natural dyes from artificial ones is through direct experience. This publication presents a visual investigation into the impact that synthetic dyes have on the world.</p>
+          </div>
         </div>
 
         <div class="wip-card">
-          <img src="imgs/back-web/afrofuturism.jpg" alt="Afrofuturism">
-          <span class="wip-card-label">Afrofuturism</span>
+          <div class="wip-card-image">
+            <img src="imgs/back-web/afrofuturism.jpg" alt="Afrofuturism">
+          </div>
+          <div class="wip-card-info">
+            <h3 class="wip-card-title">Afrofuturism</h3>
+            <p class="wip-card-year">2023</p>
+            <p class="wip-card-desc">At the intersection of the African diaspora and technological advancement lies a vision that challenges the limits of human perception. Afrofuturism is not a temporary trend or isolated phenomenon, but a culture in its own right.</p>
+          </div>
         </div>
 
         <div class="wip-card">
-          <img src="imgs/back-web/initium.jpg" alt="Initium">
-          <span class="wip-card-label">Initium</span>
+          <div class="wip-card-image">
+            <img src="imgs/back-web/billboard-mock.jpg" alt="Hitchcock Retrospective billboard">
+          </div>
+          <div class="wip-card-info">
+            <h3 class="wip-card-title">Hitchcock Retrospective</h3>
+            <p class="wip-card-year">2022</p>
+            <p class="wip-card-desc">The most effective way to create suspense is not by revealing more, but by withholding information. Suspense can be unsettling, yet it is often closer to exhilaration than fear. I see this principle reflected in graphic design, where emotion emerges through restraint. If a work of art is capable of making people feel, it has already fulfilled its purpose.</p>
+          </div>
         </div>
 
         <div class="wip-card">
-          <img src="imgs/back-web/allnp.jpg" alt="ALLNP">
-          <span class="wip-card-label">ALLNP</span>
+          <div class="wip-card-image">
+            <img src="imgs/back-web/maya.jpg" alt="The Maya Principle">
+          </div>
+          <div class="wip-card-info">
+            <h3 class="wip-card-title">The MAYA Principle</h3>
+            <p class="wip-card-year">2023</p>
+            <p class="wip-card-desc">People desire what is new, yet they instinctively reject it. They grow tired of the familiar, while continuing to seek comfort in it. New, yet familiar. Comfortable, yet somehow unfamiliar. Good design is not determined by the designer, but by the people who accept it.</p>
+          </div>
         </div>
 
         <div class="wip-card">
-          <img src="imgs/back-web/billboard-mock.jpg" alt="Hitchcock Retrospective billboard">
-          <span class="wip-card-label">Hitchcock Retrospective</span>
-        </div>
-
-        <div class="wip-card">
-          <img src="imgs/back-web/maya.jpg" alt="The Maya Principle">
-          <span class="wip-card-label">The Maya Principle</span>
-        </div>
-
-        <div class="wip-card">
-          <img src="imgs/back-web/movement.jpg" alt="Movement Basketball Academy">
-          <span class="wip-card-label">Movement Basketball Academy</span>
-        </div>
-
-        <div class="wip-card">
-          <img src="imgs/back-web/poetica.jpg" alt="Poetica">
-          <span class="wip-card-label">Poetica</span>
-        </div>
-
-        <div class="wip-card">
-          <img src="imgs/back-web/12-rules-for-life.jpg" alt="12 Rules for Life, alternate poster">
-          <span class="wip-card-label">12 Rules for Life</span>
+          <div class="wip-card-image">
+            <img src="imgs/back-web/12-rules-for-life.jpg" alt="12 Rules for Life, alternate poster">
+          </div>
+          <div class="wip-card-info">
+            <h3 class="wip-card-title">12 Rules for Life</h3>
+            <p class="wip-card-year">2024</p>
+            <p class="wip-card-desc">This editorial project explores 12 Rules for Life through typography and publication design. Rather than illustrating the book, it translates its ideas into a visual reading experience, examining how structure, hierarchy, and pacing can communicate discipline, order, and reflection.</p>
+          </div>
         </div>
 
       </div>
