@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Curvo 2 — Minsung Cho</title>
+
+<link rel="stylesheet" href="https://use.typekit.net/rjd5vvx.css">
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+}
+
+body{
+  background:#f8f8f6;
+  color:#111;
+  font-family:Arial, Helvetica, sans-serif;
+  overflow-x:hidden;
+}
+
+.home-logo{
+  position:fixed;
+  top:28px;
+  left:40px;
+
+  z-index:9999;
+
+  font-weight:900;
+  font-size:20px;
+  letter-spacing:-0.04em;
+
+  color:#111;
+  text-decoration:none;
+  line-height:1;
+
+  transition:opacity .2s ease;
+}
+
+.home-logo:hover{
+  opacity:.5;
+}
+
+.back-link{
+  position:fixed;
+  top:32px;
+  right:40px;
+
+  z-index:9999;
+
+  font-size:12px;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+
+  color:#111;
+  text-decoration:none;
+
+  transition:.2s ease;
+}
+
+.back-link:hover{
+  opacity:.5;
+}
+
+/* -----------------------
+   HERO
+----------------------- */
+
+.project-hero{
+  padding:140px 40px 48px;
+}
+
+.project-category{
+  font-size:13px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:#666;
+  margin-bottom:12px;
+}
+
+.project-hero h1{
+  font-size:clamp(40px,8vw,96px);
+  font-weight:300;
+  line-height:.95;
+  margin-bottom:24px;
+}
+
+.project-intro{
+  font-size:16px;
+  line-height:1.8;
+  max-width:640px;
+  color:#333;
+}
+
+/* -----------------------
+   IMAGES
+----------------------- */
+
+.project-image{
+  width:100%;
+  padding:0 40px 80px;
+}
+
+.project-image img{
+  width:100%;
+  display:block;
+  border-radius:12px;
+}
+
+/* -----------------------
+   BLOCKS
+----------------------- */
+
+.project-block{
+  display:flex;
+  align-items:center;
+  gap:64px;
+
+  padding:0 40px 96px;
+}
+
+.project-block.reverse{
+  flex-direction:row-reverse;
+}
+
+.project-block-image{
+  flex:1.2;
+
+  display:flex;
+  gap:16px;
+}
+
+.project-block-image img{
+  width:100%;
+  border-radius:12px;
+  display:block;
+}
+
+.project-block-text{
+  flex:1;
+}
+
+.project-block-text h2{
+  font-size:clamp(24px,3vw,36px);
+  font-weight:400;
+  margin-bottom:16px;
+}
+
+.project-block-text p{
+  font-size:15px;
+  line-height:1.8;
+  color:#333;
+}
+
+footer{
+  padding:48px 40px 100px;
+}
+
+footer a{
+  color:#666;
+  text-decoration:none;
+  font-size:14px;
+  transition:.2s ease;
+}
+
+footer a:hover{
+  color:#111;
+}
+
+/* -----------------------
+   MOBILE
+----------------------- */
+
+@media(max-width:768px){
+
+  .home-logo{
+    top:24px;
+    left:24px;
+    font-size:16px;
+  }
+
+  .back-link{
+    top:28px;
+    right:24px;
+  }
+
+  .project-hero{
+    padding:100px 20px 32px;
+  }
+
+  .project-image{
+    padding:0 20px 48px;
+  }
+
+  .project-block{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:24px;
+    padding:0 20px 64px;
+  }
+
+  .project-block.reverse{
+    flex-direction:column;
+  }
+
+  .project-block-image{
+    flex-direction:column;
+  }
+
+  footer{
+    padding:32px 20px 64px;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<a class="home-logo" href="../../../index.html">MINSUNG</a>
+<a class="back-link" href="../index.html">← Back to Projects</a>
+
+<section class="project-hero">
+  <p class="project-category">Typeface</p>
+  <h1>Curvo 2</h1>
+  <p class="project-intro">Curvo 2 is a typeface designed around the geometry of a squircle, a form that sits between a square and a circle. This hybrid shape gives the typeface its distinctive balance of structure and softness. The name Curvo is derived from the curved edges that define each character, where sharp corners are replaced with smooth, continuous curves.</p>
+</section>
+
+<section class="project-image">
+  <img src="../../imgs/curvo/curvo%20main.webp" alt="Curvo 2 typeface main visual">
+</section>
+
+<section class="project-block">
+  <div class="project-block-image">
+    <img src="../../imgs/curvo/blender%20screen.png" alt="Curvo 2 Movable Type Blender model">
+  </div>
+  <div class="project-block-text">
+    <h2>Movable Type</h2>
+    <p>Movable Type is a physical extension of the typeface, translating digital letterforms into resin 3D-printed movable type. Designed through Blender and fabricated using Lychee Slicer, the project consists of 40 characters, including alphabets, numbers, and punctuation.</p>
+  </div>
+</section>
+
+<section class="project-block reverse">
+  <div class="project-block-image">
+    <img src="../../imgs/curvo/playing%20card.webp" alt="Curvo 2 playing card design">
+    <img src="../../imgs/curvo/playing%20card%20case.png" alt="Curvo 2 playing card case">
+  </div>
+  <div class="project-block-text">
+    <h2>Playing Cards</h2>
+    <p>Curvo 2 Playing Cards is a playing card design project based on the custom typeface. By extending the typeface into a graphic system, the project reimagines traditional card symbols and layouts through the distinct visual language of Curvo 2.</p>
+  </div>
+</section>
+
+<section class="project-image">
+  <img src="../../imgs/curvo/curvo%20pamplet.png" alt="Curvo 2 specimen pamphlet">
+</section>
+
+<footer>
+  <a href="../../contact/index.html">Contact for Detailed Portfolio →</a>
+</footer>
+
+</body>
+</html>
