@@ -67,131 +67,118 @@ body{
   font-weight:400;
   font-style:normal;
 
-  display:flex;
-  flex-direction:row;
-  align-items:stretch;
-  text-align:center;
-
-  overflow-x:auto;
-  overflow-y:hidden;
-
-  scroll-snap-type:x mandatory;
-  scroll-behavior:smooth;
+  overflow:hidden;
 
   transform:rotateX(180deg);
 }
 
-.back-hero{
+.mind-scene{
   position:relative;
-  width:100vw;
+  width:100%;
   height:100%;
-  flex-shrink:0;
+  perspective:1800px;
+}
 
-  scroll-snap-align:start;
+.mind-text{
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate3d(-50%,-50%,0);
 
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  z-index:30;
+  max-width:520px;
+  padding:0 24px;
 
-  padding:0 2rem;
+  pointer-events:none;
 }
 
 .back-text{
   font-size:clamp(11px,1.3vw,14px);
   font-weight:400;
   line-height:1.7;
-  max-width:640px;
-  text-align:left;
-  margin:0 auto;
+  text-align:center;
+  margin:0;
 }
 
-.scroll-hint{
+.mind-card{
   position:absolute;
-  left:50%;
-  bottom:56px;
-  transform:translateX(-50%);
+  top:var(--t);
+  left:var(--l);
+  width:var(--w);
 
-  display:flex;
-  align-items:center;
-  gap:8px;
+  transform:
+    translate3d(-50%,-50%,0)
+    translate3d(var(--px,0px),var(--py,0px),var(--z));
+  transition:transform .6s cubic-bezier(.22,.9,.32,1);
 
-  font-size:10px;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  opacity:.45;
+  cursor:pointer;
+  will-change:transform;
 }
 
-.scroll-hint-arrow{
-  display:inline-block;
-  animation:scrollHintNudge 1.4s ease-in-out infinite;
+.mind-card-image{
+  position:relative;
+  overflow:hidden;
+  box-shadow:0 22px 46px rgba(0,0,0,.5);
 }
 
-@keyframes scrollHintNudge{
-  0%,100%{ transform:translateX(0); }
-  50%{ transform:translateX(7px); }
-}
-
-.wip-grid{
-  display:flex;
-  flex-direction:row;
-  align-items:center;
-  height:100%;
-  gap:140px;
-  padding:0 12vw;
-}
-
-.wip-card{
-  flex:0 0 auto;
-  width:min(34vw,400px);
-
-  display:flex;
-  flex-direction:column;
-  gap:26px;
-
-  scroll-snap-align:center;
-}
-
-.wip-card-image{
-  width:100%;
-
-  display:flex;
-  justify-content:center;
-}
-
-.wip-card-image img{
-  width:auto;
-  height:auto;
-  max-width:100%;
-  max-height:48vh;
+.mind-card-image img{
   display:block;
+  width:100%;
+  height:auto;
 
-  filter:grayscale(15%);
+  filter:grayscale(40%) brightness(.88);
+  transition:filter .4s ease;
 }
 
-.wip-card-info{
+.mind-card:hover .mind-card-image img,
+.mind-card.is-active .mind-card-image img{
+  filter:grayscale(0%) brightness(1);
+}
+
+.mind-card-info{
+  position:absolute;
+  inset:auto 0 0 0;
+  padding:10px 12px 8px;
+
+  background:linear-gradient(to top, rgba(0,0,0,.85), rgba(0,0,0,0));
+
   text-align:left;
+  opacity:0;
+  transform:translateY(6px);
+  transition:opacity .25s ease, transform .25s ease;
+  pointer-events:none;
 }
 
-.wip-card-title{
-  font-size:15px;
+.mind-card:hover .mind-card-info,
+.mind-card.is-active .mind-card-info{
+  opacity:1;
+  transform:translateY(0);
+}
+
+.mind-card-title{
+  font-size:11px;
   font-weight:600;
   letter-spacing:.02em;
   text-transform:uppercase;
-  margin:0 0 8px;
+  margin:0 0 4px;
 }
 
-.wip-card-year{
-  font-size:11px;
-  opacity:.5;
-  margin:0 0 16px;
+.mind-card-year{
+  font-size:9px;
+  opacity:.55;
+  margin:0 0 6px;
 }
 
-.wip-card-desc{
-  font-size:11px;
-  line-height:1.7;
-  opacity:.7;
-  max-width:36ch;
+.mind-card-desc{
+  font-size:9px;
+  line-height:1.55;
+  opacity:.75;
   margin:0;
+
+  display:-webkit-box;
+  -webkit-line-clamp:4;
+  -webkit-box-orient:vertical;
+  overflow:hidden;
 }
 
 .flip-toggle{
@@ -382,21 +369,13 @@ canvas{
     font-size:8px;
   }
 
-  .back-hero{
-    padding:0 1.2rem;
+  .mind-text{
+    max-width:80vw;
+    padding:0 12px;
   }
 
-  .scroll-hint{
-    bottom:36px;
-  }
-
-  .wip-grid{
-    gap:64px;
-    padding:0 12vw;
-  }
-
-  .wip-card{
-    width:76vw;
+  .mind-card{
+    width:var(--wm, var(--w));
   }
 }
 
@@ -439,70 +418,10 @@ canvas{
 
     <!-- BACK -->
     <div class="face back" id="backFace">
-      <div class="back-hero">
-        <p class="back-text">For the sweetness of the grain is revealed by loving restraint.</p>
+      <div class="mind-scene" id="mindScene">
 
-        <div class="scroll-hint">
-      
-          <span class="scroll-hint-arrow">&#8594;</span>
-        </div>
-      </div>
-
-      <div class="wip-grid">
-
-        <div class="wip-card">
-          <div class="wip-card-image">
-            <img src="imgs/back-web/kinetic-time-orbiter.jpg" alt="Kinetic Time Orbiter">
-          </div>
-          <div class="wip-card-info">
-            <h3 class="wip-card-title">Kinetic Time Orbiter</h3>
-            <p class="wip-card-year">2026</p>
-            <p class="wip-card-desc">Visualizing time is different from simply seeing it. To perceive time in a single moment is to possess a kind of control over it. Rather than separating the hour and minute hands, this object proposes a clock in which the hour hand, the minute hand, and the clock itself exist as one.</p>
-          </div>
-        </div>
-
-        <div class="wip-card">
-          <div class="wip-card-image">
-            <img src="imgs/back-web/12-rules-for-life.jpg" alt="12 Rules for Life, alternate poster">
-          </div>
-          <div class="wip-card-info">
-            <h3 class="wip-card-title">12 Rules for Life</h3>
-            <p class="wip-card-year">2024</p>
-            <p class="wip-card-desc">This project reimagines 12 Rules for Life by Jordan Peterson across two forms: a poster series that translates its conceptual themes into visual form and event identity, and an editorial exploration through typography and publication design. Rather than illustrating the book directly, it translates its ideas into a visual reading experience, examining how structure, hierarchy, and pacing can communicate discipline, order, and reflection.</p>
-          </div>
-        </div>
-
-        <div class="wip-card">
-          <div class="wip-card-image">
-            <img src="pages/imgs/background05.webp" alt="Coal + Ice interactive climate web experience">
-          </div>
-          <div class="wip-card-info">
-            <h3 class="wip-card-title">Coal + Ice</h3>
-            <p class="wip-card-year">2024</p>
-            <p class="wip-card-desc">Coal+Ice is an interactive web project inspired by an Asia Society event, translating climate change into a responsive digital experience. Powered by a realtime weather API, the interface gradually melts as temperatures rise, creating a visual reflection on fragility and environmental change.</p>
-          </div>
-        </div>
-
-        <div class="wip-card">
-          <div class="wip-card-image">
-            <img src="pages/imgs/background06.webp" alt="Solar System infographic poster design">
-          </div>
-          <div class="wip-card-info">
-            <h3 class="wip-card-title">Solar System</h3>
-            <p class="wip-card-year">2023</p>
-            <p class="wip-card-desc">Solar System is an infographic poster design that visualizes information about the solar system and its planets. Using a network of lines to represent planetary distance and movement, the project transforms scientific information into a clear and engaging visual system.</p>
-          </div>
-        </div>
-
-        <div class="wip-card">
-          <div class="wip-card-image">
-            <img src="pages/imgs/photo3.webp" alt="Receipt? Rethink! environmental campaign posters">
-          </div>
-          <div class="wip-card-info">
-            <h3 class="wip-card-title">Receipt? Rethink!</h3>
-            <p class="wip-card-year">2023</p>
-            <p class="wip-card-desc">Receipt? Rethink! is a campaign project encouraging audiences to reconsider the everyday use of receipt paper. Through infographic-driven poster designs, the project visualizes the environmental and material costs of production, including BPA, tree usage, and water consumption.</p>
-          </div>
+        <div class="mind-text">
+          <p class="back-text">For the sweetness of the grain is revealed by loving restraint.</p>
         </div>
 
       </div>
@@ -1073,32 +992,220 @@ flipToggle
   );
 });
 
-/* HORIZONTAL SCROLL ON BACK */
+/* BACK SCENE — 3D SCATTER PARALLAX */
 
-const backFace =
+const mindScene =
 document.getElementById(
-  "backFace"
+  "mindScene"
 );
 
-backFace.addEventListener(
-"wheel",
+const mindProjects = [
+  {
+    img:"imgs/back-web/kinetic-time-orbiter.jpg",
+    alt:"Kinetic Time Orbiter",
+    title:"Kinetic Time Orbiter",
+    year:"2026",
+    desc:"Visualizing time is different from simply seeing it. To perceive time in a single moment is to possess a kind of control over it. Rather than separating the hour and minute hands, this object proposes a clock in which the hour hand, the minute hand, and the clock itself exist as one."
+  },
+  {
+    img:"imgs/back-web/12-rules-for-life.jpg",
+    alt:"12 Rules for Life, alternate poster",
+    title:"12 Rules for Life",
+    year:"2024",
+    desc:"This project reimagines 12 Rules for Life by Jordan Peterson across two forms: a poster series that translates its conceptual themes into visual form and event identity, and an editorial exploration through typography and publication design. Rather than illustrating the book directly, it translates its ideas into a visual reading experience, examining how structure, hierarchy, and pacing can communicate discipline, order, and reflection."
+  },
+  {
+    img:"pages/imgs/background05.webp",
+    alt:"Coal + Ice interactive climate web experience",
+    title:"Coal + Ice",
+    year:"2024",
+    desc:"Coal+Ice is an interactive web project inspired by an Asia Society event, translating climate change into a responsive digital experience. Powered by a realtime weather API, the interface gradually melts as temperatures rise, creating a visual reflection on fragility and environmental change."
+  },
+  {
+    img:"pages/imgs/background06.webp",
+    alt:"Solar System infographic poster design",
+    title:"Solar System",
+    year:"2023",
+    desc:"Solar System is an infographic poster design that visualizes information about the solar system and its planets. Using a network of lines to represent planetary distance and movement, the project transforms scientific information into a clear and engaging visual system."
+  },
+  {
+    img:"pages/imgs/photo3.webp",
+    alt:"Receipt? Rethink! environmental campaign posters",
+    title:"Receipt? Rethink!",
+    year:"2023",
+    desc:"Receipt? Rethink! is a campaign project encouraging audiences to reconsider the everyday use of receipt paper. Through infographic-driven poster designs, the project visualizes the environmental and material costs of production, including BPA, tree usage, and water consumption."
+  }
+];
+
+const mindCardCount = mindProjects.length;
+
+function buildMindCards(){
+
+  for(let i=0; i<mindCardCount; i++){
+
+    const p =
+      mindProjects[
+        i % mindProjects.length
+      ];
+
+    let t, l, tries = 0;
+
+    do {
+
+      t = 5 + Math.random() * 90;
+      l = 5 + Math.random() * 90;
+      tries++;
+
+    } while(
+      tries < 12 &&
+      Math.pow((l-50)/27,2) +
+      Math.pow((t-50)/19,2) < 1
+    );
+
+    const z =
+      Math.round(
+        -60 + Math.random() * 150
+      );
+
+    const depth =
+      (0.25 + Math.random() * 0.6)
+        .toFixed(2);
+
+    const w =
+      Math.round(
+        46 + Math.random() * 40
+      );
+
+    const wm =
+      Math.round(
+        30 + Math.random() * 26
+      );
+
+    const card =
+      document.createElement("div");
+
+    card.className = "mind-card";
+    card.dataset.depth = depth;
+
+    card.style.setProperty("--t", t.toFixed(2) + "%");
+    card.style.setProperty("--l", l.toFixed(2) + "%");
+    card.style.setProperty("--z", z + "px");
+    card.style.setProperty("--w", w + "px");
+    card.style.setProperty("--wm", wm + "px");
+
+    card.innerHTML =
+      '<div class="mind-card-image">' +
+        '<img src="' + p.img + '" alt="' + p.alt + '" loading="lazy">' +
+      '</div>' +
+      '<div class="mind-card-info">' +
+        '<h3 class="mind-card-title">' + p.title + '</h3>' +
+        '<p class="mind-card-year">' + p.year + '</p>' +
+        '<p class="mind-card-desc">' + p.desc + '</p>' +
+      '</div>';
+
+    mindScene.appendChild(card);
+  }
+}
+
+buildMindCards();
+
+const mindCards =
+Array.from(
+  mindScene.querySelectorAll(
+    ".mind-card"
+  )
+);
+
+const maxShiftX = 26;
+const maxShiftY = 16;
+
+let rafPending = false;
+let lastEvent = null;
+
+function applyParallax(){
+
+  rafPending = false;
+
+  if(!isBack || !lastEvent) return;
+
+  const nx =
+    (lastEvent.clientX / innerWidth - 0.5) * 2;
+
+  const ny =
+    (lastEvent.clientY / innerHeight - 0.5) * 2;
+
+  mindCards.forEach((card)=>{
+
+    const depth =
+      parseFloat(
+        card.dataset.depth
+      ) || 0.5;
+
+    card.style.setProperty(
+      "--px",
+      (nx * maxShiftX * depth) + "px"
+    );
+
+    card.style.setProperty(
+      "--py",
+      (ny * maxShiftY * depth) + "px"
+    );
+  });
+}
+
+window.addEventListener(
+"mousemove",
+(e)=>{
+
+  lastEvent = e;
+
+  if(!rafPending){
+    rafPending = true;
+    requestAnimationFrame(applyParallax);
+  }
+});
+
+mindCards.forEach((card)=>{
+
+  card.addEventListener(
+  "click",
+  ()=>{
+
+    const wasActive =
+      card.classList.contains(
+        "is-active"
+      );
+
+    mindCards.forEach((c)=>
+      c.classList.remove(
+        "is-active"
+      )
+    );
+
+    if(!wasActive){
+      card.classList.add(
+        "is-active"
+      );
+    }
+  });
+});
+
+mindScene.addEventListener(
+"click",
 (e)=>{
 
   if(
-    Math.abs(e.deltaY) >
-    Math.abs(e.deltaX)
-  ){
+    e.target.closest(
+      ".mind-card"
+    )
+  ) return;
 
-    e.preventDefault();
-
-    backFace.scrollBy({
-      left:e.deltaY,
-      behavior:"instant"
-    });
-  }
-},
-{ passive:false }
-);
+  mindCards.forEach((c)=>
+    c.classList.remove(
+      "is-active"
+    )
+  );
+});
 
 </script>
 
